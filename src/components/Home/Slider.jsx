@@ -18,7 +18,7 @@ const Slider = ({ children , slideCount}) => {
             {/* Custom Buttons */}
             <button
                 ref={prevRef}
-                className="absolute -left-8 top-1/2 z-10 -translate-y-1/2
+                className="absolute lg:-left-8 -left-2 top-1/2 z-10 -translate-y-1/2
                    bg-secondary text-white shadow-md rounded-full w-10 h-10
                    flex items-center justify-center "
             >
@@ -27,7 +27,7 @@ const Slider = ({ children , slideCount}) => {
 
             <button
                 ref={nextRef}
-                className="absolute -right-8 top-1/2 z-10 -translate-y-1/2
+                className="absolute lg:-right-8 -right-2 top-1/2 z-10 -translate-y-1/2
                    bg-secondary text-white shadow-md rounded-full w-10 h-10
                    flex items-center justify-center "
             >

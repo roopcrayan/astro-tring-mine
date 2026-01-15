@@ -13,6 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { GiStarShuriken } from "react-icons/gi";
+import UserLogin from "./UserLogin"
 
 
 
@@ -186,7 +187,7 @@ const Navrow2 = [
   },
 ]
 
- 
+
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null })
@@ -259,10 +260,10 @@ const Header = () => {
                       )}
                   </li>
                 ) : (
-                  <Button key={ele.name} className="text-white">
-                    <User />
-                    {ele.name}
-                  </Button>
+
+                  <li key={ele.type}>
+                    <UserLogin ele={ele} />
+                  </li>
                 )
 
               )}
