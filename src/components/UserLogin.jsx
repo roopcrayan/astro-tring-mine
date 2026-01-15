@@ -87,7 +87,7 @@ const UserLogin = ({ ele, getuser }) => {
     console.log("LOGIN DATA 👉", data);
   };
 
-  const handleSignup = async (e) => {
+  const handleSignup =   (e) => {
     e.preventDefault();
 
     const { success, data, error } = signupSchema.safeParse(form);
@@ -101,8 +101,7 @@ const UserLogin = ({ ele, getuser }) => {
     }
 
     setErrors({ fields: {}, form: "" });
-    const res = await axios.post("http://192.168.1.8:8000/api/user/register", data)
-    console.log(res)
+    
     console.log("SIGNUP DATA 👉", data);
   };
 

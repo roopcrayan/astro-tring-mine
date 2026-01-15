@@ -1,8 +1,11 @@
+import FreeKundliBanner from '@/components/kunclicomponent/FreeKundliBanner'
 import React from 'react'
 
 const FreeKundli = () => {
   return (
-    <div>FreeKundli</div>
+    <>
+    <FreeKundliBanner />
+    </>
   )
 }
 

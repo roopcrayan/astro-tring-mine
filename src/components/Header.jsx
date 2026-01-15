@@ -194,7 +194,7 @@ const Navrow2 = [
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null })
   const [user, setUser] = useState(null);
-   const getuser = () => {
+  const getuser = () => {
     try {
       localStorage.getItem("user") && setUser(JSON.parse(localStorage.getItem("user")));
 
@@ -212,8 +212,8 @@ const Header = () => {
     setUser(null);
   }
 
-  
-  
+
+
 
 
   return (
@@ -230,7 +230,7 @@ const Header = () => {
           <div className="links xl:block hidden">
 
             {/* ========= ROW 1 ========= */}
-            <ul className="flex justify-end pt-2 2xl:gap-3 gap-0">
+            {/* <ul className="flex justify-end pt-2 2xl:gap-3 gap-0">
               {Navrow1.map((ele, index) => (
                 <li
                   key={ele.name}
@@ -283,47 +283,12 @@ const Header = () => {
                     )}
                 </li>
               ))}
-              <li>
-                {
-                  user?.username ?
-                    <DropdownMenu className="">
-                      <DropdownMenuTrigger>
-                        <Avatar>
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className={"border-accent  "} align="end">
-                        <div className="flex flex-col items-center gap-1">
-                          <Avatar className={"size-17 mb-0"}>
-                            <AvatarImage  src="https://github.com/shadcn.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <DropdownMenuLabel className="text-center">
-                          <span className="text-md capitalize font-bold text-secondary">   {user?.username}</span>
-                            <br />
-                            <span className="text-xs">{+911234567895}</span>
-                          </DropdownMenuLabel>
-                        </div>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                        <DropdownMenuItem variant="destructive" onClick={logout}>Logout</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-
-                    :
-                    <UserLogin ele={{ name: "Login" }} getuser={getuser} />
-                }
-              </li>
-
-            </ul>
+            </ul> */}
 
 
 
             {/* ========= ROW 2 ========= */}
-            <ul className="flex justify-end py-2 2xl:gap-3 gap-0">
+            <ul className="flex justify-end items-center py-2 2xl:gap-3 gap-0">
               {Navrow2.map((ele, index) => (
                 <li
                   key={ele.name}
@@ -370,6 +335,41 @@ const Header = () => {
                     )}
                 </li>
               ))}
+
+              <li>
+                {
+                  user?.username ?
+                    <DropdownMenu className="">
+                      <DropdownMenuTrigger>
+                        <Avatar>
+                          <AvatarImage src="https://github.com/shadcn.png" />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className={"border-accent  "} align="end">
+                        <div className="flex flex-col items-center gap-1">
+                          <Avatar className={"size-17 mb-0"}>
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <DropdownMenuLabel className="text-center">
+                            <span className="text-md capitalize font-bold text-secondary">   {user?.username}</span>
+                            <br />
+                            <span className="text-xs">{+911234567895}</span>
+                          </DropdownMenuLabel>
+                        </div>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Profile</DropdownMenuItem>
+                        <DropdownMenuItem variant="destructive" onClick={logout}>Logout</DropdownMenuItem>
+                        <DropdownMenuItem>Team</DropdownMenuItem>
+                        <DropdownMenuItem>Subscription</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    :
+                    <UserLogin ele={{ name: "Login" }} getuser={getuser} />
+                }
+              </li>
             </ul>
 
 
