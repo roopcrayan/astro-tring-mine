@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,8 @@ import { User } from "lucide-react";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin, userRegister } from "@/redux/slide/UserAuth";
+import { toast } from "react-toastify";
+
 
 /* ---------------- ZOD SCHEMAS ---------------- */
 
@@ -41,7 +44,7 @@ const signupSchema = z
 
 const UserLogin = ({ ele }) => {
   const dispatch = useDispatch();
-  const { user, error, loading } = useSelector(
+  const { token, user, error, loading } = useSelector(
     (state) => state.userAuth
   );
 
@@ -79,14 +82,9 @@ const UserLogin = ({ ele }) => {
   }, [user]);
 
   /* ---------------- HANDLERS ---------------- */
-  useEffect(() => {
-    if (user) setOpen(false);
-  }, [user]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({
       ...prev,
@@ -112,8 +110,17 @@ const UserLogin = ({ ele }) => {
     }
 
     try {
-      await dispatch(userLogin(parsed.data)).unwrap();
-      console.log(user);
+      // ✅ Get token directly from dispatch result
+      const resultToken = await dispatch(userLogin(parsed.data)).unwrap();
+      localStorage.setItem("token", resultToken);
+      toast.success('you are logged in', {
+        position: "top-right",
+        autoClose: 5000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      setOpen(false);
     } catch (err) {
       setErrors({
         fields: {},
@@ -137,7 +144,13 @@ const UserLogin = ({ ele }) => {
 
     try {
       await dispatch(userRegister(parsed.data)).unwrap();
-      console.log(user)
+      toast.success('Register successfull please login', {
+        position: "top-right",
+        autoClose: 5000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
       setMode("login");
     } catch (err) {
       setErrors({
@@ -163,6 +176,12 @@ const UserLogin = ({ ele }) => {
           <DialogTitle className="text-center text-secondary">
             {mode === "login" ? "Login" : "Create Account"}
           </DialogTitle>
+          {/* ✅ Accessibility description */}
+          <DialogDescription className="sr-only">
+            {mode === "login"
+              ? "Enter your username and password to login"
+              : "Fill the form to create a new account"}
+          </DialogDescription>
         </DialogHeader>
 
         {(errors.form || error) && (

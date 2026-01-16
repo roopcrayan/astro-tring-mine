@@ -23,6 +23,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { logout, userProfile } from "@/redux/slide/UserAuth"
+import { useDispatch, useSelector } from "react-redux"
+import { toast } from "react-toastify"
 
 const Navrow1 = [
   {
@@ -189,221 +192,150 @@ const Navrow2 = [
   },
 ]
 
-
-
 const Header = () => {
-  const [openMenu, setOpenMenu] = useState({ row: null, index: null })
-  const [user, setUser] = useState(null);
-  const getuser = () => {
-    try {
-      localStorage.getItem("user") && setUser(JSON.parse(localStorage.getItem("user")));
+  const [openMenu, setOpenMenu] = useState({ row: null, index: null });
 
-    } catch (error) {
-      console.log("Error fetching user data:", error);
-    }
-  }
+  const { token, user } = useSelector((state) => state.userAuth);
+  const dispatch = useDispatch();
 
+  /* ------------------ FETCH USER WHEN TOKEN EXISTS ------------------ */
   useEffect(() => {
-    getuser();
-  }, [])
+    if (token) {
+      dispatch(userProfile());
+    }
+  }, [token, dispatch]);
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  }
+  /* ------------------ STORAGE SYNC (MULTI TAB LOGOUT) ------------------ */
+  useEffect(() => {
+    const handleStorage = () => {
+      if (!localStorage.getItem("token")) {
+        dispatch(logout());
+      }
+    };
 
+    window.addEventListener("storage", handleStorage);
 
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [dispatch]);
 
-
+  /* ------------------ LOGOUT ------------------ */
+  const logoutUser = () => {
+    localStorage.removeItem("token");
+    toast.success('you are logged out', {
+      position: "top-right",
+      autoClose: 5000,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "light",
+    });
+    dispatch(logout());
+  };
 
   return (
-    <header className="py-2 shadow-sm! shadow-primary">
+    <header className="py-2 shadow-sm shadow-primary">
       <div className="container">
         <div className="flex justify-between items-center">
+          {/* LOGO */}
+          <Link to="/">
+            <img src={logo} className="h-8 md:h-10 xl:h-12" alt="logo" />
+          </Link>
 
-          <div className="logo">
-            <Link to="/">
-              <img src={logo} className="2xl:h-15 xl:h-12 md:h-10  h-8" alt="" />
-            </Link>
-          </div>
-
-          <div className="links xl:block hidden">
-
-            {/* ========= ROW 1 ========= */}
-            {/* <ul className="flex justify-end pt-2 2xl:gap-3 gap-0">
-              {Navrow1.map((ele, index) => (
-                <li
-                  key={ele.name}
-                  className="relative xl:text-md! text-sm! font-medium me-1 px-2 py-1 group "
-                  onMouseEnter={() => setOpenMenu({ row: 1, index })}
-                  onMouseLeave={() => setOpenMenu({ row: null, index: null })}
-                >
-                  {!ele.hasmenu ? (<div className="flex items-center gap-3">
-                    <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                    <NavLink to={ele.path}>  {ele.name}</NavLink>
-                  </div>
-                  ) : (
-                    <span className="cursor-pointer flex items-center gap-1">
-                      <div className="flex items-center gap-3">
-                        <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                        {ele.name}
-                      </div>
-                      <ChevronDown className="size-5 group-hover:rotate-180 transition-all duration-75" />
-                    </span>
-                  )}
-
-                  {ele.hasmenu &&
-                    openMenu.row === 1 &&
-                    openMenu.index === index && (
-                      <div className="absolute right-0 top-full z-50 border-b-4 border-primary   overflow-hidden rounded-sm!">
-
-
-                        <ScrollArea className={`h-100
-                           ${ele.name === "Calculators"
-                            ? "w-80"
-                            : ele.name === "Horoscopes"
-                              ? "w-52"
-                              : "w-auto"
-                          } rounded-sm border border-gray-200 bg-white shadow-md`}
-                        >
-                          <ul>
-                            {ele.menu.map((item) => (
-                              <li
-                                key={item.label}
-                                className="px-4 py-2 text-sm flex items-center gap-2 group  font-lighte text-primary hover:text-white hover:font-semibold hover:bg-primary "
-                              >
-
-                                <GiStarShuriken className="" />
-                                <Link to={item.path}>{item.label}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </ScrollArea>
-                      </div>
-                    )}
-                </li>
-              ))}
-            </ul> */}
-
-
-
-            {/* ========= ROW 2 ========= */}
-            <ul className="flex justify-end items-center py-2 2xl:gap-3 gap-0">
-              {Navrow2.map((ele, index) => (
-                <li
-                  key={ele.name}
-                  className="relative xl:text-md!
-                   text-sm! font-medium me-1 px-2  group"
-                  onMouseEnter={() => setOpenMenu({ row: 2, index })}
-                  onMouseLeave={() => setOpenMenu({ row: null, index: null })}
-                >
-                  {!ele.hasmenu ? (
-                    <div className="flex items-center gap-3">
-                      <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                      <Link to={ele.path}>  {ele.name}</Link>
-                    </div>
-                  ) : (
-                    <span className="cursor-pointer flex items-center gap-2">
-                      <div className="flex items-center gap-3">
-                        <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                        {ele.name}
-                      </div>
-                      <ChevronDown className="size-5 group-hover:rotate-180 transition-all duration-75" />
-                    </span>
-                  )}
-
-                  {ele.hasmenu &&
-                    openMenu.row === 2 &&
-                    openMenu.index === index && (
-                      <div className="absolute right-0 top-full z-50 border-b-4 border-primary   overflow-hidden rounded-sm">
-
-                        <ScrollArea className="h-97.5 w-62.5 rounded-sm border border-gray-200 bg-white shadow-md">
-                          <ul>
-                            {ele.menu.map((item) => (
-                              <li
-                                key={item.label}
-                                className="px-4 py-2 text-sm flex items-center gap-2 group  font-lighte text-primary hover:text-white hover:font-semibold hover:bg-primary "
-                              >
-                                <GiStarShuriken />
-
-                                <Link to={item.path}>{item.label}</Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </ScrollArea>
-                      </div>
-                    )}
-                </li>
-              ))}
-
-              <li>
-                {
-                  user?.username ?
-                    <DropdownMenu className="">
-                      <DropdownMenuTrigger>
-                        <Avatar>
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className={"border-accent  "} align="end">
-                        <div className="flex flex-col items-center gap-1">
-                          <Avatar className={"size-17 mb-0"}>
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <DropdownMenuLabel className="text-center">
-                            <span className="text-md capitalize font-bold text-secondary">   {user?.username}</span>
-                            <br />
-                            <span className="text-xs">{+911234567895}</span>
-                          </DropdownMenuLabel>
-                        </div>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                        <DropdownMenuItem variant="destructive" onClick={logout}>Logout</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-
-                    :
-                    <UserLogin ele={{ name: "Login" }} getuser={getuser} />
-                }
+          {/* DESKTOP MENU */}
+          <ul className="hidden xl:flex items-center gap-3">
+            {Navrow2.map((ele, index) => (
+              <li
+                key={ele.name}
+                className="relative text-sm font-medium px-2 group"
+                onMouseEnter={() => setOpenMenu({ row: 2, index })}
+                onMouseLeave={() => setOpenMenu({ row: null, index: null })}
+              >
+                <Link to={ele.path} className="flex items-center gap-2">
+                  <GiStarShuriken className="text-primary group-hover:rotate-45 transition" />
+                  {ele.name}
+                </Link>
               </li>
-            </ul>
+            ))}
 
+            {/* AUTH SECTION */}
+            <li>
+              {token && user?.username ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
 
-          </div>
-          <div className=" xl:hidden flex  items-center gap-2">
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel className="text-center">
+                      <Link to="/update-user">
+                        <Avatar className={"mx-auto size-13"}>
+                          <AvatarImage src="https://github.com/shadcn.png" />
+                          <AvatarFallback>U</AvatarFallback>
+                        </Avatar>
+                        <p className="font-bold text-secondary capitalize">
+                          {user.username}
+                        </p>
+                      </Link>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
 
-            <Sheet >
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={logoutUser}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <UserLogin ele={{ name: "Login" }} />
+              )}
+            </li>
+          </ul>
+
+          {/* MOBILE MENU */}
+          <div className="xl:hidden flex items-center gap-2">
+            <Sheet>
               <SheetTrigger>
                 <MenuIcon />
               </SheetTrigger>
-
-              <SheetContent side="left" className={"scroll-y-auto xl:hidden"}>
+              <SheetContent side="left">
                 <SheetHeader>
                   <SheetTitle>Menu</SheetTitle>
                 </SheetHeader>
 
-                <div className="mt-4">
-                  <MobileNavSection navItems={mobileMenus} title="Quick Links" />
-                </div>
+                <ScrollArea className="mt-4">
+                  {Navrow2.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className="block px-4 py-2 text-sm font-semibold"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </ScrollArea>
               </SheetContent>
             </Sheet>
-            <Button className="text-white">
-              <User />
-              Login
-            </Button>
 
+            {!token && (
+              <Button className="text-white">
+                <User />
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
 
 const mobileMenus = [...Navrow1, ...Navrow2]
 
