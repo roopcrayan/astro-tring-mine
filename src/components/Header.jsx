@@ -29,7 +29,7 @@ const Header = () => {
   // Navrow2 now uses the horosType state
   const Navrow2 = [
     {
-      name: "Astrologers",
+      name: "Horoscopes",
       path: "/best-astrologers",
       type: "link",
       hasmenu: horosType.length > 0,

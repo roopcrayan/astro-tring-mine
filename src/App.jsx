@@ -10,6 +10,8 @@ import CallwithAstro from './pages/callwithAstro/callwithAstro'
 import AstrologerDetails from './pages/AstrologerDetails'
 import AstroLogin from "./components/AstroLogin";
 import AstroRegister from "./components/AstroRegistration";
+import HoroscopeDetails from "./components/Horoscopes/HoroscopeDetails";
+import Horoscopes from "./pages/Horoscopes";
 // import BlogPage from "./pages/BlogPage";
 
 
@@ -26,7 +28,8 @@ const App = () => {
           <Route path='/chat-with-astrologer' element={<ChatWithAstro />} />
           <Route path='/talk-to-astrologer' element={<CallwithAstro />} />
           <Route path='/astro-register' element={<AstroRegister />} />
-          <Route path='/astro-details' element={<AstrologerDetails />} />
+          <Route path='/horoscopes/:date' element={<Horoscopes />} />
+          <Route path='/horoscopes/:time/:horos' element={<HoroscopeDetails />} />
           <Route path='/astro-login' element={<AstroLogin />} />
           {/* <Route path="/blogs" element={<BlogPage />} /> */}
           {/* <Route path="/blog/:id" element={<BlogDetails />} /> */}
