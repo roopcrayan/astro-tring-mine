@@ -1,21 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from "@/components/ui/sheet"
-import { logout, userProfile } from "@/redux/slide/UserAuth"
-import { ChevronDown, MenuIcon, User } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { logout, userProfile } from "@/redux/slice/UserAuth"
+import { ChevronDown, Menu, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { GiStarShuriken } from "react-icons/gi"
 import { useDispatch, useSelector } from "react-redux"
@@ -25,177 +12,32 @@ import logo from "../assets/logo-light.png"
 import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
 import UserLogin from "./UserLogin"
+import { getHoroscope } from "@/redux/slice/HoroscopesSlice"
+ 
 
-const Navrow1 = [
-  {
-    name: "Free Kundli",
-    path: "/free-kundli",
-    type: "link",
-    hasmenu: false,
-  },
-  {
-    name: "Kundli Matching",
-    path: "/kundli-matching",
-    type: "link",
-    hasmenu: false,
-  },
-  {
-    name: "Compatibility",
-    path: "/compatibility",
-    type: "link",
-    hasmenu: false,
-  },
-  {
-    name: "Calculators",
-    path: "/",
-    type: "link",
-    hasmenu: true,
-    menu: [
-      { label: "Love Calculator", path: "/love-calculator" },
-      { label: "Atmakaraka and Darakaraka Calculator", path: "/atmakaraka-and-darakaraka-calculator" },
-      { label: "Numerology Calculator", path: "/name-numerology-calculator" },
-      { label: "Sun Sign Calculator", path: "/sun-sign-calculator" },
-      { label: "Rising Sign Calculator / Ascendant Calculator", path: "/rising-ascendant-sign-calculator" },
-      { label: "Rashi Calculator", path: "/rashi-moon-sign-calculator" },
-      { label: "Dasha Calculator", path: "/dasha-calculator" },
-      { label: "Nakshatra Calculator", path: "/nakshatra-birth-star-calculator" },
-      { label: "Mangal Dosha Calculator", path: "/mangal-kuja-dosha-calculator" },
-      { label: "Shani Sade Sati Calculator", path: "/shani-sade-sati-calculator" },
-      { label: "Moon Phase Calculator", path: "/moon-phase-calculator" },
-      { label: "Birth Chart Calculator / Natal Chart Calculator", path: "/birth-natal-chart-calculator" },
-      { label: "Flames Calculator", path: "/flames-calculator" },
-      { label: "Lucky Vehicle Number Calculator", path: "/lucky-vehicle-number-calculator" },
-      { label: "Friendship Calculator", path: "/friendship-calculator" },
-      { label: "Kaal Sarp Dosh Calculator", path: "/kaal-sarp-dosh-calculator" },
-      { label: "Ishta Devata Calculator", path: "/ishta-devata-calculator" },
-      { label: "Lo Shu Grid Calculator", path: "/lo-shu-grid-calculator" },
-      { label: "Transit Chart Calculator", path: "/transit-chart-calculator" },
-      { label: "Name Compatibility Calculator", path: "/name-compatibility-calculator" },
-      { label: "Age Calculator", path: "/age-calculator" },
-      { label: "Mulank Calculator", path: "/mulank-calculator" },
-      { label: "Mobile Number Numerology Calculator", path: "/mobile-number-numerology-calculator" },
-      { label: "Destiny Number Calculator", path: "/destiny-number-calculator" },
-      { label: "Lucky Name Numerology Calculator", path: "/lucky-name-numerology-calculator" },
-    ],
-  },
-  {
-    name: "Horoscopes",
-    path: "/",
-    type: "link",
-    hasmenu: true,
-    menu: [
-      { label: "Horoscope 2026", path: "/horoscope-2025" },
-      { label: "Today's Horoscope", path: "/horoscope/todays-horoscope" },
-      { label: "Weekly Horoscope", path: "/horoscope/weekly-horoscope" },
-      { label: "Monthly Horoscope", path: "/horoscope/monthly-horoscope" },
-      { label: "Yearly Horoscope", path: "/horoscope/yearly-horoscope" },
-      { label: "Daily Horoscope", path: "/horoscope/daily-horoscope" },
-      { label: "Free Kundali", path: "/freekundali" },
-      { label: "Tomorrow's Horoscope", path: "/horoscope/tomorrow-horoscope" },
-      { label: "Yesterday's Horoscope", path: "/horoscope/yesterday-horoscope" },
-      { label: "Chinese Horoscope", path: "/chinese-astrology" },
-    ],
-  },
-
-]
-
-const IndianCityWiseAstrologers = [
-  { label: "Astrologers in Delhi", path: "/astrologer/india/delhi" },
-  { label: "Astrologers in Gurgaon", path: "/astrologer/india/gurgaon" },
-  { label: "Astrologers in Noida", path: "/astrologer/india/noida" },
-  { label: "Astrologers in Mumbai", path: "/astrologer/india/mumbai" },
-  { label: "Astrologers in Kolkata", path: "/astrologer/india/kolkata" },
-  { label: "Astrologers in Bangalore", path: "/astrologer/india/bangalore" },
-  { label: "Astrologers in Pune", path: "/astrologer/india/pune" },
-  { label: "Astrologers in Lucknow", path: "/astrologer/india/lucknow" },
-  { label: "Astrologers in Chandigarh", path: "/astrologer/india/chandigarh" },
-  { label: "Astrologers in Chennai", path: "/astrologer/india/chennai" },
-  { label: "Astrologers in Hyderabad", path: "/astrologer/india/hyderabad" },
-  { label: "Astrologers in Ahmedabad", path: "/astrologer/india/ahmedabad" },
-  { label: "Astrologers in Jaipur", path: "/astrologer/india/jaipur" },
-  { label: "Astrologers in Nagpur", path: "/astrologer/india/nagpur" },
-  { label: "Astrologers in Patna", path: "/astrologer/india/patna" },
-  { label: "Astrologers in Ludhiana", path: "/astrologer/india/ludhiana" },
-  { label: "Astrologers in Jalandhar", path: "/astrologer/india/jalandhar" },
-  { label: "Astrologers in Amritsar", path: "/astrologer/india/amritsar" },
-  { label: "Astrologers in Guwahati", path: "/astrologer/india/guwahati" },
-  { label: "Astrologers in Gujarat", path: "/astrologer/india/gujarat" },
-  { label: "Astrologers in Indore", path: "/astrologer/india/indore" },
-  { label: "Astrologers in Bhubaneswar", path: "/astrologer/india/bhubaneswar" },
-  { label: "Astrologers in Surat", path: "/astrologer/india/surat" },
-  { label: "Astrologers in Bhopal", path: "/astrologer/india/bhopal" },
-  { label: "Astrologers in Varanasi", path: "/astrologer/india/varanasi" },
-  { label: "Astrologers in Navi Mumbai", path: "/astrologer/india/navi-mumbai" },
-  { label: "Astrologers in Allahabad", path: "/astrologer/india/allahabad" },
-  { label: "Astrologers in Howrah", path: "/astrologer/india/howrah" },
-  { label: "Astrologers in Ranchi", path: "/astrologer/india/ranchi" },
-  { label: "Astrologers in Jodhpur", path: "/astrologer/india/jodhpur" },
-  { label: "Astrologers in Madurai", path: "/astrologer/india/madurai" },
-  { label: "Astrologers in Raipur", path: "/astrologer/india/raipur" },
-  { label: "Astrologers in Kharagpur", path: "/astrologer/india/kharagpur" },
-  { label: "Astrologers in Jamshedpur", path: "/astrologer/india/jamshedpur" },
-  { label: "Astrologers in Cuttack", path: "/astrologer/india/cuttack" },
-  { label: "Astrologers in Kochi", path: "/astrologer/india/kochi" },
-  { label: "Astrologers in Dehradun", path: "/astrologer/india/dehradun" },
-  { label: "Astrologers in Durgapur", path: "/astrologer/india/durgapur" },
-  { label: "Astrologers in Asansol", path: "/astrologer/india/asansol" },
-  { label: "Astrologers in Ujjain", path: "/astrologer/india/ujjain" },
-  { label: "Astrologers in Siliguri", path: "/astrologer/india/siliguri" },
-  { label: "Astrologers in Jammu", path: "/astrologer/india/jammu" },
-  { label: "Astrologers in Udaipur", path: "/astrologer/india/udaipur" },
-  { label: "Astrologers in Haridwar", path: "/astrologer/india/haridwar" },
-  { label: "Astrologers in South Delhi", path: "/astrologer/india/south-delhi" },
-  { label: "Astrologers in Coimbatore", path: "/astrologer/india/coimbatore" },
-  { label: "Astrologers in Vijayawada", path: "/astrologer/india/vijayawada" },
-  { label: "Astrologers in Panchkula", path: "/astrologer/india/panchkula" },
-  { label: "Astrologers in Salem", path: "/astrologer/india/salem" },
-  { label: "Astrologers in Ambala", path: "/astrologer/india/ambala" },
-  { label: "Astrologers in Vellore", path: "/astrologer/india/vellore" },
-  { label: "Astrologers in Shimla", path: "/astrologer/india/shimla" },
-]
-
-const Navrow2 = [
-  {
-    name: "Best Astrologers",
-    path: "/best-astrologers",
-    type: "link",
-    hasmenu: true,
-    menu: IndianCityWiseAstrologers
-  },
-  {
-    name: "Chat with Astrologer",
-    path: "/chat-with-astrologer",
-    type: "link",
-    hasmenu: false,
-
-  },
-  {
-    name: "Talk to Astrologer",
-    path: "/talk-to-astrologer",
-    type: "link",
-    hasmenu: false,
-
-  },
-  {
-    name: "Astrotalk Store",
-    path: "/store",
-    type: "link",
-    hasmenu: false,
-  },
-  {
-    name: "Blog",
-    path: "/blog",
-    type: "link",
-    hasmenu: false,
-  },
-
-]
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null });
-
+  const [horosType, setHorosType] = useState([]);
+  
   const { token, user } = useSelector((state) => state.userAuth);
+  const { horoscope, loading } = useSelector((state) => state.horoscope);
   const dispatch = useDispatch();
+
+  // Navrow2 now uses the horosType state
+  const Navrow2 = [
+    {
+      name: "Astrologers",
+      path: "/best-astrologers",
+      type: "link",
+      hasmenu: horosType.length > 0,
+      menu: horosType
+    },
+    { name: "Chat with Astrologer", path: "/chat-with-astrologer", type: "link", hasmenu: false },
+    { name: "Talk to Astrologer", path: "/talk-to-astrologer", type: "link", hasmenu: false },
+    { name: "Astromall", path: "/astromall", type: "link", hasmenu: false },
+    { name: "Astrotalk Store", path: "/store", type: "link", hasmenu: false },
+  ]
 
   /* ------------------ FETCH USER WHEN TOKEN EXISTS ------------------ */
   useEffect(() => {
@@ -211,9 +53,7 @@ const Header = () => {
         dispatch(logout());
       }
     };
-
     window.addEventListener("storage", handleStorage);
-
     return () => {
       window.removeEventListener("storage", handleStorage);
     };
@@ -222,7 +62,7 @@ const Header = () => {
   /* ------------------ LOGOUT ------------------ */
   const logoutUser = () => {
     localStorage.removeItem("token");
-    toast.success('you are logged out', {
+    toast.success('You are logged out', {
       position: "top-right",
       autoClose: 5000,
       pauseOnHover: true,
@@ -232,133 +72,173 @@ const Header = () => {
     dispatch(logout());
   };
 
+  const getHorescopes = async () => {
+    try {
+      await dispatch(getHoroscope()).unwrap()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
+  const getAllllTypes = () => {
+    try {
+      const horosSet = new Set();
+      const horos = [];
+      
+      horoscope?.forEach((ele) => {
+        if (ele.type && !horosSet.has(ele.type)) {
+          horosSet.add(ele.type);
+          horos.push({
+            label: ele.type.charAt(0).toUpperCase() + ele.type.slice(1) + " Horoscope",
+            path: `/horoscopes/${ele.type.toLowerCase()}`
+          });
+        }
+      });
+      
+      setHorosType(horos);
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  useEffect(() => {
+    getHorescopes()
+  }, [])
+
+  useEffect(() => {
+    if (horoscope?.length > 0) {
+      getAllllTypes()
+    }
+  }, [horoscope])
+
+  const mobileMenus = [  ...Navrow2]
 
   return (
-    <header className="py-2 shadow-sm shadow-primary">
-      <div className="container">
-        <div className="flex justify-between items-center">
-          {/* LOGO */}
-          <Link to="/">
-            <img src={logo} className="h-8 md:h-10 xl:h-12" alt="logo" />
-          </Link>
+    <header className="sticky top-0 z-50 w-full border-b border-accent bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        {/* LOGO */}
+        <Link to="/" className="flex items-center space-x-2">
+          <img src={logo} alt="Logo" className="h-8 w-auto" />
+        </Link>
 
-          {/* DESKTOP MENU */}
-          <ul className="hidden xl:flex items-center gap-3">
-            {Navrow2.map((ele, index) => (
-              <li
-                key={ele.name}
-                className="relative text-sm font-medium px-2 group"
-                onMouseEnter={() => ele.hasmenu && setOpenMenu({ row: 2, index })}
-                onMouseLeave={() => ele.hasmenu && setOpenMenu({ row: null, index: null })}
-              >
-                <Link to={ele.path} className="flex items-center gap-2">
-                  <GiStarShuriken className="text-primary group-hover:rotate-45 transition" />
+        {/* DESKTOP MENU */}
+        <nav className="hidden md:flex items-center space-x-6">
+          {Navrow2.map((ele, index) => (
+            <div
+              key={index}
+              className="relative"
+              onMouseEnter={() => ele.hasmenu && setOpenMenu({ row: 2, index })}
+              onMouseLeave={() => ele.hasmenu && setOpenMenu({ row: null, index: null })}
+            >
+              {ele.hasmenu ? (
+                <button className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary">
+                  <GiStarShuriken className="text-accent size-4 me-2" />
+                  <span>{ele.name}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              ) : (
+                <Link
+                  to={ele.path}
+                  className="text-sm font-medium flex items-center transition-colors hover:text-primary"
+                >
+                   <GiStarShuriken className="text-accent size-4 me-2" />
                   {ele.name}
                 </Link>
-
-                {/* 🔽 DROPDOWN */}
-                {ele.hasmenu &&
-                  openMenu.row === 2 &&
-                  openMenu.index === index && (
-                    <div className="absolute left-0 top-full mt-3 w-[320px] bg-white shadow-xl border rounded-xl p-4 z-50">
-                      <ul className="grid grid-cols-1 gap-2 max-h-[350px] overflow-y-auto">
-                        {ele.menu.map((item) => (
-                          <li key={item.path}>
-                            <Link
-                              to={item.path}
-                              className="block text-sm px-3 py-2 rounded-md hover:bg-primary/10 hover:text-primary transition"
-                            >
-                              {item.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-              </li>
-            ))}
-
-            {/* AUTH SECTION */}
-            <li>
-              {token && user?.username ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>U</AvatarFallback>
-                    </Avatar>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel className="text-center">
-                      <Link to="/update-user">
-                        <Avatar className={"mx-auto size-13"}>
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>U</AvatarFallback>
-                        </Avatar>
-                        <p className="font-bold text-secondary capitalize">
-                          {user.username}
-                        </p>
-                      </Link>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={logoutUser}
-                    >
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <UserLogin ele={{ name: "Login" }} />
               )}
-            </li>
-          </ul>
 
-          {/* MOBILE MENU */}
-          <div className="xl:hidden flex items-center gap-2">
-            <Sheet>
-              <SheetTrigger>
-                <MenuIcon />
-              </SheetTrigger>
-              <SheetContent side="left">
-                <SheetHeader>
-                  <SheetTitle>Menu</SheetTitle>
-                </SheetHeader>
+              {/* DROPDOWN */}
+              {ele.hasmenu && openMenu.row === 2 && openMenu.index === index && (
+                <div className="absolute left-0  top-full mt-0 w-56 rounded-md border bg-popover p-1 shadow-md">
+                  <ScrollArea className="max-h-96">
+                    {ele.menu.map((item, idx) => (
+                      <Link
+                        key={idx}
+                        to={item.path}
+                        className=" px-3 py-2 text-sm rounded-sm flex items-center hover:bg-accent hover:text-white"
+                      >
+                         <GiStarShuriken className="  size-4 me-2" /> {item.label}
+                      </Link>
+                    ))}
+                  </ScrollArea>
+                </div>
+              )}
+            </div>
+          ))}
 
-                <ScrollArea className="mt-4">
-                  {Navrow2.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      className="block px-4 py-2 text-sm font-semibold"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </ScrollArea>
-              </SheetContent>
-            </Sheet>
-
-            {!token && (
-              <Button className="text-white">
-                <User />
-                Login
-              </Button>
+          {/* AUTH SECTION */}
+          <div>
+            {token && user?.username ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.avatar} alt={user.username} />
+                      <AvatarFallback>
+                        {user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.username}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logoutUser}>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <UserLogin />
             )}
           </div>
-        </div>
+        </nav>
+
+        {/* MOBILE MENU */}
+        <Sheet>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-80">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
+              <MobileNavSection navItems={mobileMenus} />
+              {token && user?.username ? (
+                <div className="mt-4 px-2 space-y-2">
+                  <div className="flex items-center gap-3 p-2 border rounded-md">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={user.avatar} alt={user.username} />
+                      <AvatarFallback>
+                        {user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{user.username}</p>
+                    </div>
+                  </div>
+                  <Button onClick={logoutUser} variant="outline" className="w-full">
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="mt-4 px-2">
+                  <UserLogin />
+                </div>
+              )}
+            </ScrollArea>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
   );
 };
 
 export default Header;
-
-const mobileMenus = [...Navrow1, ...Navrow2]
 
 const MobileNavSection = ({ navItems, title }) => {
   const [openIndex, setOpenIndex] = useState(null)
@@ -368,41 +248,27 @@ const MobileNavSection = ({ navItems, title }) => {
   }
 
   return (
-    <div className="overflow-y-scroll">
-      {/* {title && (
-        <h3 className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          {title}
-        </h3>
-      )} */}
-
+    <div className="space-y-1">
       {navItems.map((item, index) => {
         if (item.type === "btn") return null
 
         return (
-          <div key={item.name} className="border-b border-gray-100">
+          <div key={index}>
             <div
-              className={`flex items-center justify-between   px-4 py-3 ${item.hasmenu ? "cursor-pointer" : ""
-                }`}
+              className="flex items-center justify-between px-2 py-2 text-sm font-medium cursor-pointer hover:bg-accent rounded-md"
               onClick={item.hasmenu ? () => toggleMenu(index) : undefined}
             >
               {!item.hasmenu ? (
-                <Link to={item.path} className="flex-1 font-semibold ">
-                  <div className="flex items-center gap-3">
-                    <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                    {item.name}
-                  </div>
+                <Link to={item.path} className="flex-1">
+                  {item.name}
                 </Link>
               ) : (
                 <>
-                  <span className="flex-1 font-semibold ">
-                    <div className="flex items-center gap-3">
-                      <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                      {item.name}
-                    </div>
-                  </span>
+                  <span>{item.name}</span>
                   <ChevronDown
-                    className={`size-5  transition-transform duration-300 ${openIndex === index ? "rotate-180" : ""
-                      }`}
+                    className={`h-4 w-4 transition-transform ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
                   />
                 </>
               )}
@@ -411,23 +277,20 @@ const MobileNavSection = ({ navItems, title }) => {
             {/* Dropdown with Transition */}
             {item.hasmenu && (
               <div
-                className={`transition-all duration-300 ease-in-out bg-gray-50 ${openIndex === index ? "max-h-100 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-                  }`}
+                className={`overflow-hidden transition-all duration-200 ${
+                  openIndex === index ? "max-h-96" : "max-h-0"
+                }`}
               >
-                <div className={`${openIndex === index ? "overflow-y-auto max-h-87.5" : ""}`}>
-                  <ul className="py-2">
-                    {item.menu.map((menuItem) => (
-                      <li key={menuItem.label}>
-                        <Link
-                          to={menuItem.path}
-                          className=" gap-2 px-6 py-2 text-sm flex items-center  hover:bg-primary/10 hover:text-primary transition-colors"
-                        >
-                          <GiStarShuriken className="text-primary group-hover:rotate-45 transition-all duration-100" />
-                          {menuItem.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="ml-4 mt-1 space-y-1 border-l border-accent pl-2">
+                  {item.menu.map((menuItem, menuIndex) => (
+                    <Link
+                      key={menuIndex}
+                      to={menuItem.path}
+                      className="block px-2 py-1.5 text-sm hover:bg-accent rounded-md"
+                    >
+                      {menuItem.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
             )}
@@ -437,4 +300,3 @@ const MobileNavSection = ({ navItems, title }) => {
     </div>
   )
 }
-

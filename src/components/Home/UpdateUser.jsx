@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AuthHOC from "./AuthHOC";
 import { useDispatch, useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
-import { userProfile, userUpdate } from "@/redux/slide/UserAuth";
+import { userProfile, userUpdate } from "@/redux/slice/UserAuth";
 import { Card, CardContent } from "../ui/card";
 
 const UpdateUser = () => {

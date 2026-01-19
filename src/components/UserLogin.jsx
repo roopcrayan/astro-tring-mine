@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin, userRegister } from "@/redux/slide/UserAuth";
+import { userLogin, userRegister } from "@/redux/slice/UserAuth";
 import { toast } from "react-toastify";
 
 
