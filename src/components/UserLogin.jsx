@@ -15,6 +15,7 @@ import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin, userRegister } from "@/redux/slice/UserAuth";
 import { toast } from "react-toastify";
+import { PhoneInput } from "./ui/phone-input";
 
 
 /* ---------------- ZOD SCHEMAS ---------------- */
@@ -175,7 +176,7 @@ const UserLogin = ({ ele }) => {
         <DialogHeader>
           <DialogTitle className="text-center text-secondary">
             <h2 className="text-2xl">
-            {mode === "login" ? "Login" : "Create Account"}
+              {mode === "login" ? "Login" : "Create Account"}
             </h2>
           </DialogTitle>
           {/* ✅ Accessibility description */}
@@ -245,35 +246,98 @@ const UserLogin = ({ ele }) => {
         {mode === "signup" && (
           <form onSubmit={handleSignup} className="mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-              {[
-                ["name", "Name"],
-                ["email", "Email"],
-                ["mobile", "Mobile"],
-                ["username", "Username"],
-                ["password", "Password"],
-                ["confirmPassword", "Confirm Password"],
-              ].map(([name, label]) => (
-                <div key={name}>
-                  <Label className="mb-2" >{label}</Label>
-                  <Input
-                    name={name}
-                    type={
-                      name.includes("password")
-                        ? "password"
-                        : name === "mobile"
-                          ? "tel"
-                          : "text"
-                    }
-                    maxLength={name === "mobile" ? 10 : undefined}
-                    onChange={handleChange}
-                  />
-                  {errors.fields[name] && (
-                    <p className="text-red-600 text-sm">
-                      {errors.fields[name][0]}
-                    </p>
-                  )}
-                </div>
-              ))}
+
+              {/* Name */}
+              <div>
+                <Label className="mb-2">Name</Label>
+                <Input
+                  name="name"
+                  type="text"
+                  onChange={handleChange}
+                />
+                {errors.fields.name && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.name[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <Label className="mb-2">Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  onChange={handleChange}
+                />
+                {errors.fields.email && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.email[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* Mobile */}
+              <div>
+                <Label className="mb-2">Mobile</Label>
+                <PhoneInput   
+                  name="mobile"
+                  type="tel"
+                  maxLength={10}
+                  onChange={handleChange}
+                />
+                {errors.fields.mobile && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.mobile[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* Username */}
+              <div>
+                <Label className="mb-2">Username</Label>
+                <Input
+                  name="username"
+                  type="text"
+                  onChange={handleChange}
+                />
+                {errors.fields.username && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.username[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* Password */}
+              <div>
+                <Label className="mb-2">Password</Label>
+                <Input
+                  name="password"
+                  type="password"
+                  onChange={handleChange}
+                />
+                {errors.fields.password && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.password[0]}
+                  </p>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div>
+                <Label className="mb-2">Confirm Password</Label>
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  onChange={handleChange}
+                />
+                {errors.fields.confirmPassword && (
+                  <p className="text-red-600 text-sm">
+                    {errors.fields.confirmPassword[0]}
+                  </p>
+                )}
+              </div>
+
             </div>
 
             <Button
@@ -297,6 +361,7 @@ const UserLogin = ({ ele }) => {
             </p>
           </form>
         )}
+
       </DialogContent>
     </Dialog>
   );

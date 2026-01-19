@@ -67,8 +67,8 @@ const HoroscopeDetails = () => {
 
         <div className="grid md:grid-cols-6 gap-6 mb-6">
           {/* LEFT SIDE */}
-          <div className="md:col-span-2">
-            <Card className="border-primary">
+          <div className="md:col-span-2 ">
+            <Card className="border-primary  ">
               <CardContent>
                 <h4 className="mb-3 font-semibold text-2xl text-primary">
                   Horoscopes
