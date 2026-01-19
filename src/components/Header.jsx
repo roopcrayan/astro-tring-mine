@@ -13,14 +13,16 @@ import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
 import UserLogin from "./UserLogin"
 import { getHoroscope } from "@/redux/slice/HoroscopesSlice"
- 
+import { AstrologerProfile, logoutAstro } from "@/redux/slice/AstroAuth"
+
 
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null });
   const [horosType, setHorosType] = useState([]);
-  
+
   const { token, user } = useSelector((state) => state.userAuth);
+  const { astrologer } = useSelector((state) => state.astroAuth);
   const { horoscope, loading } = useSelector((state) => state.horoscope);
   const dispatch = useDispatch();
 
@@ -43,8 +45,10 @@ const Header = () => {
   useEffect(() => {
     if (token) {
       dispatch(userProfile());
+      dispatch(AstrologerProfile())
     }
   }, [token, dispatch]);
+
 
   /* ------------------ STORAGE SYNC (MULTI TAB LOGOUT) ------------------ */
   useEffect(() => {
@@ -61,7 +65,6 @@ const Header = () => {
 
   /* ------------------ LOGOUT ------------------ */
   const logoutUser = () => {
-    localStorage.removeItem("token");
     toast.success('You are logged out', {
       position: "top-right",
       autoClose: 5000,
@@ -70,6 +73,7 @@ const Header = () => {
       theme: "light",
     });
     dispatch(logout());
+    dispatch(logoutAstro());
   };
 
   const getHorescopes = async () => {
@@ -84,7 +88,7 @@ const Header = () => {
     try {
       const horosSet = new Set();
       const horos = [];
-      
+
       horoscope?.forEach((ele) => {
         if (ele.type && !horosSet.has(ele.type)) {
           horosSet.add(ele.type);
@@ -94,7 +98,7 @@ const Header = () => {
           });
         }
       });
-      
+
       setHorosType(horos);
     } catch (error) {
       console.log(error.message)
@@ -111,7 +115,7 @@ const Header = () => {
     }
   }, [horoscope])
 
-  const mobileMenus = [  ...Navrow2]
+  const mobileMenus = [...Navrow2]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-accent bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -141,7 +145,7 @@ const Header = () => {
                   to={ele.path}
                   className="text-sm font-medium flex items-center transition-colors hover:text-primary"
                 >
-                   <GiStarShuriken className="text-accent size-4 me-2" />
+                  <GiStarShuriken className="text-accent size-4 me-2" />
                   {ele.name}
                 </Link>
               )}
@@ -156,7 +160,7 @@ const Header = () => {
                         to={item.path}
                         className=" px-3 py-2 text-sm rounded-sm flex items-center hover:bg-accent hover:text-white"
                       >
-                         <GiStarShuriken className="  size-4 me-2" /> {item.label}
+                        <GiStarShuriken className="  size-4 me-2" /> {item.label}
                       </Link>
                     ))}
                   </ScrollArea>
@@ -167,14 +171,14 @@ const Header = () => {
 
           {/* AUTH SECTION */}
           <div>
-            {token && user?.username ? (
+            {token && user?.username || astrologer?.username ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.avatar} alt={user.username} />
+                      <AvatarImage src={user?.avatar} alt={user?.username} />
                       <AvatarFallback>
-                        {user.username.charAt(0).toUpperCase()}
+                        {astrologer?.username.charAt(0).toUpperCase() || user?.username.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -182,7 +186,7 @@ const Header = () => {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.username}</p>
+                      <p className="text-sm font-medium leading-none">{user?.username || astrologer?.username}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -208,17 +212,17 @@ const Header = () => {
             </SheetHeader>
             <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
               <MobileNavSection navItems={mobileMenus} />
-              {token && user?.username ? (
+              {token && user?.username || astrologer?.username ? (
                 <div className="mt-4 px-2 space-y-2">
                   <div className="flex items-center gap-3 p-2 border rounded-md">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.avatar} alt={user.username} />
+                      <AvatarImage src={user?.avatar} alt={user?.username} />
                       <AvatarFallback>
-                        {user.username.charAt(0).toUpperCase()}
+                        {astrologer?.username.charAt(0).toUpperCase() || user?.username.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">{user.username}</p>
+                      <p className="text-sm font-medium">{user?.username || astrologer?.username}</p>
                     </div>
                   </div>
                   <Button onClick={logoutUser} variant="outline" className="w-full">
@@ -266,9 +270,8 @@ const MobileNavSection = ({ navItems, title }) => {
                 <>
                   <span>{item.name}</span>
                   <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      openIndex === index ? "rotate-180" : ""
-                    }`}
+                    className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""
+                      }`}
                   />
                 </>
               )}
@@ -277,9 +280,8 @@ const MobileNavSection = ({ navItems, title }) => {
             {/* Dropdown with Transition */}
             {item.hasmenu && (
               <div
-                className={`overflow-hidden transition-all duration-200 ${
-                  openIndex === index ? "max-h-96" : "max-h-0"
-                }`}
+                className={`overflow-hidden transition-all duration-200 ${openIndex === index ? "max-h-96" : "max-h-0"
+                  }`}
               >
                 <div className="ml-4 mt-1 space-y-1 border-l border-accent pl-2">
                   {item.menu.map((menuItem, menuIndex) => (

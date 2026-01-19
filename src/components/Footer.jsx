@@ -123,8 +123,8 @@ const Footer = () => {
               <div>
                 <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Astrologer</h2>
                 <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrologer Login</Link></li>
-                    <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-regiter"} ><FaAnglesRight className="me-2 inline" /> Astrologer Registration</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-login"} ><FaAnglesRight className="me-2 inline" /> Astrologer Login</Link></li>
+                    <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-register"} ><FaAnglesRight className="me-2 inline" /> Astrologer Registration</Link></li>
                 </ul>
               </div>
               <div>

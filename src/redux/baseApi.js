@@ -1,10 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://astro.adkrayons.com/api",
-    headers: {
-        "Content-Type": "application/json",
-    },
+    baseURL: "https://astro.adkrayons.com/api"
 })
 
 api.interceptors.request.use((config) => {

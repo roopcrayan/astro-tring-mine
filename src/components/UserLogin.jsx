@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogin, userRegister } from "@/redux/slice/UserAuth";
 import { toast } from "react-toastify";
 import { PhoneInput } from "./ui/phone-input";
-
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 /* ---------------- ZOD SCHEMAS ---------------- */
 
@@ -29,9 +29,8 @@ const signupSchema = z
   .object({
     name: z.string().min(2, "Name is required"),
     email: z.string().email("Invalid email address"),
-    mobile: z
-      .string()
-      .length(10, "Mobile must be exactly 10 digits"),
+    mobile: z.string().min(10, "Mobile must be at least 10 digits"),
+    country_code: z.string().min(1, "Country code is required"),
     username: z.string().min(3, "Username is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(6, "Confirm your password"),
@@ -45,9 +44,7 @@ const signupSchema = z
 
 const UserLogin = ({ ele }) => {
   const dispatch = useDispatch();
-  const { token, user, error, loading } = useSelector(
-    (state) => state.userAuth
-  );
+  const { user, error, loading } = useSelector((state) => state.userAuth);
 
   const [mode, setMode] = useState("login");
   const [open, setOpen] = useState(false);
@@ -55,11 +52,13 @@ const UserLogin = ({ ele }) => {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    country_code: "",
     mobile: "",
     username: "",
     password: "",
     confirmPassword: "",
   });
+
 
   const [errors, setErrors] = useState({
     fields: {},
@@ -75,6 +74,7 @@ const UserLogin = ({ ele }) => {
         name: "",
         email: "",
         mobile: "",
+        country_code: "",
         username: "",
         password: "",
         confirmPassword: "",
@@ -86,6 +86,7 @@ const UserLogin = ({ ele }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setForm((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({
       ...prev,
@@ -93,6 +94,9 @@ const UserLogin = ({ ele }) => {
       form: "",
     }));
   };
+
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -111,16 +115,10 @@ const UserLogin = ({ ele }) => {
     }
 
     try {
-      // ✅ Get token directly from dispatch result
-      const resultToken = await dispatch(userLogin(parsed.data)).unwrap();
-      localStorage.setItem("token", resultToken);
-      toast.success('you are logged in', {
-        position: "top-right",
-        autoClose: 5000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-      });
+      const token = await dispatch(userLogin(parsed.data)).unwrap();
+      localStorage.setItem("token", token);
+
+      toast.success("You are logged in");
       setOpen(false);
     } catch (err) {
       setErrors({
@@ -143,15 +141,14 @@ const UserLogin = ({ ele }) => {
       return;
     }
 
+    // Prepare data without confirmPassword
+    const { confirmPassword, ...submitData } = parsed.data;
+
+    console.log("Signup Data:", submitData);
+
     try {
-      await dispatch(userRegister(parsed.data)).unwrap();
-      toast.success('Register successfull please login', {
-        position: "top-right",
-        autoClose: 5000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-      });
+      await dispatch(userRegister(submitData)).unwrap();
+      toast.success("Register successful, please login");
       setMode("login");
     } catch (err) {
       setErrors({
@@ -179,7 +176,7 @@ const UserLogin = ({ ele }) => {
               {mode === "login" ? "Login" : "Create Account"}
             </h2>
           </DialogTitle>
-          {/* ✅ Accessibility description */}
+
           <DialogDescription className="sr-only">
             {mode === "login"
               ? "Enter your username and password to login"
@@ -197,7 +194,7 @@ const UserLogin = ({ ele }) => {
         {mode === "login" && (
           <form onSubmit={handleLogin} className="space-y-4 mt-4">
             <div>
-              <Label className="mb-2" >Username</Label>
+              <Label className="mb-2">Username</Label>
               <Input name="username" onChange={handleChange} />
               {errors.fields.username && (
                 <p className="text-red-600 text-sm">
@@ -207,12 +204,8 @@ const UserLogin = ({ ele }) => {
             </div>
 
             <div>
-              <Label className="mb-2" >Password</Label>
-              <Input
-                type="password"
-                name="password"
-                onChange={handleChange}
-              />
+              <Label className="mb-2">Password</Label>
+              <Input type="password" name="password" onChange={handleChange} />
               {errors.fields.password && (
                 <p className="text-red-600 text-sm">
                   {errors.fields.password[0]}
@@ -220,15 +213,12 @@ const UserLogin = ({ ele }) => {
               )}
             </div>
 
-            <Button
-              className="w-full bg-secondary text-white"
-              disabled={loading}
-            >
+            <Button className="w-full bg-secondary text-white" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </Button>
 
             <p className="text-center text-sm">
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <span
                 className="text-secondary cursor-pointer"
                 onClick={() => {
@@ -246,15 +236,9 @@ const UserLogin = ({ ele }) => {
         {mode === "signup" && (
           <form onSubmit={handleSignup} className="mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-
-              {/* Name */}
               <div>
                 <Label className="mb-2">Name</Label>
-                <Input
-                  name="name"
-                  type="text"
-                  onChange={handleChange}
-                />
+                <Input name="name" value={form.name} onChange={handleChange} />
                 {errors.fields.name && (
                   <p className="text-red-600 text-sm">
                     {errors.fields.name[0]}
@@ -262,14 +246,9 @@ const UserLogin = ({ ele }) => {
                 )}
               </div>
 
-              {/* Email */}
               <div>
                 <Label className="mb-2">Email</Label>
-                <Input
-                  name="email"
-                  type="email"
-                  onChange={handleChange}
-                />
+                <Input name="email" value={form.email} onChange={handleChange} />
                 {errors.fields.email && (
                   <p className="text-red-600 text-sm">
                     {errors.fields.email[0]}
@@ -277,30 +256,35 @@ const UserLogin = ({ ele }) => {
                 )}
               </div>
 
-              {/* Mobile */}
               <div>
                 <Label className="mb-2">Mobile</Label>
-                <PhoneInput   
-                  name="mobile"
-                  type="tel"
-                  maxLength={10}
-                  onChange={handleChange}
-                />
-                {errors.fields.mobile && (
+                <div className="flex">
+
+                  <Input
+                    type={"text"}
+                    name="country_code"
+                    value={form.country_code}
+                    className={"w-[30%]"}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    type={"text"}
+                    name="mobile"
+                    value={form.mobile}
+                    className={"w-[70%]"}
+                    onChange={handleChange}
+                  />
+                </div>
+                {(errors.fields.mobile || errors.fields.country_code) && (
                   <p className="text-red-600 text-sm">
-                    {errors.fields.mobile[0]}
+                    {errors.fields.mobile?.[0] || errors.fields.country_code?.[0]}
                   </p>
                 )}
               </div>
 
-              {/* Username */}
               <div>
                 <Label className="mb-2">Username</Label>
-                <Input
-                  name="username"
-                  type="text"
-                  onChange={handleChange}
-                />
+                <Input name="username" value={form.username} onChange={handleChange} />
                 {errors.fields.username && (
                   <p className="text-red-600 text-sm">
                     {errors.fields.username[0]}
@@ -308,14 +292,9 @@ const UserLogin = ({ ele }) => {
                 )}
               </div>
 
-              {/* Password */}
               <div>
                 <Label className="mb-2">Password</Label>
-                <Input
-                  name="password"
-                  type="password"
-                  onChange={handleChange}
-                />
+                <Input type="password" name="password" value={form.password} onChange={handleChange} />
                 {errors.fields.password && (
                   <p className="text-red-600 text-sm">
                     {errors.fields.password[0]}
@@ -323,12 +302,12 @@ const UserLogin = ({ ele }) => {
                 )}
               </div>
 
-              {/* Confirm Password */}
               <div>
                 <Label className="mb-2">Confirm Password</Label>
                 <Input
-                  name="confirmPassword"
                   type="password"
+                  name="confirmPassword"
+                  value={form.confirmPassword}
                   onChange={handleChange}
                 />
                 {errors.fields.confirmPassword && (
@@ -337,13 +316,9 @@ const UserLogin = ({ ele }) => {
                   </p>
                 )}
               </div>
-
             </div>
 
-            <Button
-              className="w-full bg-secondary text-white"
-              disabled={loading}
-            >
+            <Button className="w-full bg-secondary text-white" disabled={loading}>
               {loading ? "Creating..." : "Sign Up"}
             </Button>
 
@@ -361,7 +336,6 @@ const UserLogin = ({ ele }) => {
             </p>
           </form>
         )}
-
       </DialogContent>
     </Dialog>
   );

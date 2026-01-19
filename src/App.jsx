@@ -5,9 +5,11 @@ import Home from './pages/Home'
 import FreeKundli from './pages/kundli/FreeKundli'
 import ChatWithAstro from './pages/chatwithAstro/ChatWithAstro'
 import CallwithAstro from './pages/callwithAstro/callwithAstro'
-import AstroLogin from './components/AstroRegistration'
+
 // import Astrodetails from './pages/AstrologerDetails'
 import AstrologerDetails from './pages/AstrologerDetails'
+import AstroLogin from "./components/AstroLogin";
+import AstroRegister from "./components/AstroRegistration";
 // import BlogPage from "./pages/BlogPage";
 
 
@@ -23,8 +25,9 @@ const App = () => {
           <Route path='/update-user' element={<UpdateUser />} />
           <Route path='/chat-with-astrologer' element={<ChatWithAstro />} />
           <Route path='/talk-to-astrologer' element={<CallwithAstro />} />
-          <Route path='/astro-regiter' element={<AstroLogin />} />
+          <Route path='/astro-register' element={<AstroRegister />} />
           <Route path='/astro-details' element={<AstrologerDetails />} />
+          <Route path='/astro-login' element={<AstroLogin />} />
           {/* <Route path="/blogs" element={<BlogPage />} /> */}
           {/* <Route path="/blog/:id" element={<BlogDetails />} /> */}
         
