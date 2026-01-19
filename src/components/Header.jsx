@@ -177,18 +177,18 @@ const Navrow2 = [
 
   },
   {
-    name: "Astromall",
-    path: "/astromall",
-    type: "link",
-    hasmenu: false,
-
-  },
-  {
     name: "Astrotalk Store",
     path: "/store",
     type: "link",
     hasmenu: false,
   },
+  {
+    name: "Blog",
+    path: "/blog",
+    type: "link",
+    hasmenu: false,
+  },
+
 ]
 
 const Header = () => {
