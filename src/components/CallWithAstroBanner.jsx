@@ -1,9 +1,10 @@
 import React from 'react'
 import CallCard from './CallCard';
+import HeadWithLogo from './HeadWithLogo';
 
 const CallWithAstroBanner = () => {
 
-        const astrologers = [
+    const astrologers = [
         {
             name: "Athena",
             specialty: "Tarot",
@@ -126,13 +127,13 @@ const CallWithAstroBanner = () => {
         }
     ];
     return (
-        <section>
+        <section className='py-10'>
             <div className="container">
-
+                <HeadWithLogo title={"Call with Astrologers"} />
                 <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mt-10'>
 
                     {
-                        astrologers.map(ele => (
+                        astrologers.map(ele => ele.isOnline && (
                             <CallCard {...ele} />
                         ))
                     }

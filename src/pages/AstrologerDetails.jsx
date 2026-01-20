@@ -6,7 +6,6 @@ const AstrologerDetails = () => {
   return (
     <>
       <Astrodetails />
-
     </>
   )
 }

@@ -21,7 +21,7 @@ export default function CallCard({ name,
                 <div className="flex flex-col sm:flex-row gap-4 items-top sm:items-center">
                     {/* Profile Image */}
                     <div className="relative flex-shrink-0 mx-auto sm:mx-0">
-                      <Link to="/astro-details">
+                        <Link to="/astro-details">
                             <img
                                 src={image}
                                 alt={name}
@@ -31,6 +31,17 @@ export default function CallCard({ name,
                         {isOnline && (
                             <div className="absolute top-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                         )}
+                        <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+                            <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star
+                                        key={i}
+                                        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                                    />
+                                ))}
+                            </div>
+                            <div className="text-xs text-gray-600">{totalOrders} orders</div>
+                        </div>
                     </div>
 
                     {/* Content */}
@@ -52,17 +63,7 @@ export default function CallCard({ name,
                         </div>
 
                         {/* Rating and Experience */}
-                        <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
-                            <div className="flex">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star
-                                        key={i}
-                                        className={`w-4 h-4 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                                    />
-                                ))}
-                            </div>
-                            <span className="text-xs text-gray-600">{totalOrders} orders</span>
-                        </div>
+
 
                         <div className="flex items-center justify-center sm:justify-start gap-1 text-sm text-gray-600 mb-3">
                             <Clock className="w-4 h-4" />

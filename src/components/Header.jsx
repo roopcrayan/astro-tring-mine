@@ -37,8 +37,13 @@ const Header = () => {
     },
     { name: "Chat with Astrologer", path: "/chat-with-astrologer", type: "link", hasmenu: false },
     { name: "Talk to Astrologer", path: "/talk-to-astrologer", type: "link", hasmenu: false },
-    { name: "Astromall", path: "/astromall", type: "link", hasmenu: false },
-    { name: "Astrotalk Store", path: "/store", type: "link", hasmenu: false },
+    {
+      name: "Shop", path: "", type: "link", hasmenu: true, menu: [
+        { label: "Gemstones", path: "/astromall/gemstones" },
+        { label: "Yantras", path: "/astromall/yantras" },
+      ]
+    },
+    { name: "Blogs", path: "/blogs", type: "link", hasmenu: false },
   ]
 
   /* ------------------ FETCH USER WHEN TOKEN EXISTS ------------------ */
