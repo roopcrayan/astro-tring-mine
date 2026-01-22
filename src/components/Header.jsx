@@ -6,7 +6,7 @@ import { ChevronDown, Menu, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { GiStarShuriken } from "react-icons/gi"
 import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import logo from "../assets/logo-light.png"
 import { Button } from "./ui/button"
@@ -20,6 +20,7 @@ import { AstrologerLogout, AstrologerProfile, GetAllAstrologer } from "@/redux/s
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null });
   const [horosType, setHorosType] = useState([]);
+  const navigate = useNavigate();
 
   const { token, user } = useSelector((state) => state.userAuth);
   const { astrologer } = useSelector((state) => state.astroAuth);
@@ -69,21 +70,26 @@ const Header = () => {
   }, [dispatch]);
 
   /* ------------------ LOGOUT ------------------ */
+
+
   const logoutUser = () => {
-    toast.success('You are logged out', {
+    dispatch(logout());
+
+    toast.success("You are logged out", {
       position: "top-right",
-      autoClose: 5000,
-      pauseOnHover: true,
-      draggable: true,
+      autoClose: 3000,
       theme: "light",
     });
-    dispatch(logout());
+    window.location.href = window.location.href
+
   };
+
+
   const fatchAstrologers = async () => {
     await dispatch(GetAllAstrologer()).unwrap();
   }
 
-  const astrologerLogout = async () => {
+  const LogoutAstro = async () => {
     toast.success('Astrologer logged out', {
       position: "top-right",
       autoClose: 5000,
@@ -92,8 +98,9 @@ const Header = () => {
       theme: "light",
     });
     await dispatch(AstrologerLogout()).unwrap();
-    await fatchAstrologers();  
     localStorage.removeItem("token");
+    localStorage.removeItem("role_id");
+    // await fatchAstrologers();
   }
 
   const getHorescopes = async () => {
@@ -138,7 +145,7 @@ const Header = () => {
   const mobileMenus = [...Navrow2]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-accent bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-primary bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* LOGO */}
         <Link to="/" className="flex items-center space-x-2">
@@ -156,7 +163,7 @@ const Header = () => {
             >
               {ele.hasmenu ? (
                 <button className="flex items-center space-x-1 text-sm font-medium transition-colors hover:text-primary">
-                  <GiStarShuriken className="text-accent size-4 me-2" />
+                  <GiStarShuriken className="text-primary size-4 me-2" />
                   <span>{ele.name}</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -165,7 +172,7 @@ const Header = () => {
                   to={ele.path}
                   className="text-sm font-medium flex items-center transition-colors hover:text-primary"
                 >
-                  <GiStarShuriken className="text-accent size-4 me-2" />
+                  <GiStarShuriken className="text-primary size-4 me-2" />
                   {ele.name}
                 </Link>
               )}
@@ -178,9 +185,9 @@ const Header = () => {
                       <Link
                         key={idx}
                         to={item.path}
-                        className=" px-3 py-2 text-sm rounded-sm flex items-center hover:bg-accent hover:text-white"
+                        className=" px-3 py-2 text-sm rounded-sm flex items-center hover:bg-primary/70 hover:text-black"
                       >
-                        <GiStarShuriken className="  size-4 me-2" /> {item.label}
+                        <GiStarShuriken className=" size-4 me-2" /> {item.label}
                       </Link>
                     ))}
                   </ScrollArea>
@@ -205,15 +212,17 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user?.username || astrologer?.username}</p>
-                    </div>
+                    <Link to="/update-user">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user?.username || astrologer?.username}</p>
+                      </div>
+                    </Link>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
-                  {astrologer?.role_id === 2 && <DropdownMenuItem onClick={() => navigate('/dashboard')}>Dashboard</DropdownMenuItem>}
-                  {astrologer?.role_id === 3 && <DropdownMenuItem onClick={logoutUser}>Logout</DropdownMenuItem>}
-                  {astrologer?.role_id === 2 && <DropdownMenuItem onClick={astrologerLogout}>AstrologerLogout</DropdownMenuItem>}
+                  {astrologer?.role_id === 2 && <DropdownMenuItem className={"cursor-pointer"} onClick={() => navigate('/astro/dashboard')}>Dashboard</DropdownMenuItem>}
+                  {astrologer?.role_id === 3 && <DropdownMenuItem className={"cursor-pointer"} onClick={logoutUser}>Logout</DropdownMenuItem>}
+                  {astrologer?.role_id === 2 && <DropdownMenuItem className={"cursor-pointer"} onClick={LogoutAstro}>AstrologerLogout</DropdownMenuItem>}
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -288,18 +297,20 @@ const MobileNavSection = ({ navItems, title }) => {
         return (
           <div key={index}>
             <div
-              className="flex items-center justify-between px-2 py-2 text-sm font-medium cursor-pointer hover:bg-accent rounded-md"
+              className="flex items-center justify-between px-2 py-2 text-sm font-medium cursor-pointer rounded-md"
               onClick={item.hasmenu ? () => toggleMenu(index) : undefined}
             >
               {!item.hasmenu ? (
                 <SheetClose asChild >
-                  <Link to={item.path} className="flex-1">
+                  <Link to={item.path} className="flex items-center">
+                    <GiStarShuriken className=" text-primary size-4 me-2" />
                     {item.name}
                   </Link>
                 </SheetClose>
               ) : (
                 <>
-                  <span>{item.name}</span>
+                  <span className="flex items-center">  <GiStarShuriken className=" text-primary size-4 me-2" />
+                    {item.name}</span>
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""
                       }`}
@@ -320,8 +331,9 @@ const MobileNavSection = ({ navItems, title }) => {
                       <Link
                         key={menuIndex}
                         to={menuItem.path}
-                        className="block px-2 py-1.5 text-sm hover:bg-accent rounded-md"
+                        className="flex px-2 py-1.5 text-sm   rounded-md"
                       >
+                        <GiStarShuriken className=" text-primary size-4 me-2" />
                         {menuItem.label}
                       </Link>
                     </SheetClose>

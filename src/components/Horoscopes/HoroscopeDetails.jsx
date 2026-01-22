@@ -68,7 +68,7 @@ const HoroscopeDetails = () => {
         <div className="grid md:grid-cols-6 gap-6 mb-6">
           {/* LEFT SIDE */}
           <div className="md:col-span-2 ">
-            <Card className="border-primary  ">
+            <Card className="border-gray-400  ">
               <CardContent>
                 <h4 className="mb-3 font-semibold text-2xl text-primary">
                   Horoscopes
@@ -100,8 +100,8 @@ const HoroscopeDetails = () => {
                       className={`mb-1 p-2 rounded-md transition
                         ${
                           time === tab
-                            ? "bg-secondary text-white"
-                            : "bg-gray-200 hover:bg-gray-300"
+                            ? "bg-primary/30 text-black"
+                            : "bg-gray-200 hover:bg-gray-250"
                         }
                       `}
                     >

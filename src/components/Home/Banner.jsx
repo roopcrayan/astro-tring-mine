@@ -24,7 +24,7 @@ const Banner = () => {
           {/* Left content */}
           <div className="space-y-5 self-center">
             <h1 className=" font-bold leading-tight">
-              UNPACK THE <br /> MYSTERIES OF <br /> THE UNIVERSE!
+              UNPACK THE  MYSTERIES OF   <br /> THE UNIVERSE!
             </h1>
 
             <p className="text-muted-foreground">
@@ -33,31 +33,31 @@ const Banner = () => {
             </p>
 
             <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
-              <Card>
+              <Card className={"active:scale-97"}>
                 <Link>
 
                   <CardHeader className="flex flex-row items-iten   justify-between">
                     <CardTitle className="flex items-center gap-3">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-                        <Phone className="h-5 w-5 text-white" />
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+                        <Phone className="h-5 w-5 " />
                       </span>
                       <span className="text-base font-semibold">
                         Talk
                       </span>
                     </CardTitle>
                     <CardAction className={"self-center"}>
-                      <MoveRight className="text-secondary " />
+                      <MoveRight className=" " />
                     </CardAction>
                   </CardHeader>
                 </Link>
               </Card>
-              <Card>
+              <Card className={"active:scale-97"}>
                 <Link>
 
                   <CardHeader className="flex flex-row items-iten  justify-between">
                     <CardTitle className="flex items-center gap-3">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-                        <IoIosChatbubbles className="h-5 w-5 text-white" />
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+                        <IoIosChatbubbles className="h-5 w-5  " />
                       </span>
                       <span className="text-base font-semibold">
                         Chat
@@ -66,42 +66,42 @@ const Banner = () => {
                       </span>
                     </CardTitle>
                     <CardAction className={"self-center"}>
-                      <MoveRight className="text-secondary" />
+                      <MoveRight className=" " />
                     </CardAction>
                   </CardHeader>
                 </Link>
               </Card>
-              <Card>
+              <Card className={"active:scale-97"}>
                 <Link>
 
                   <CardHeader className="flex flex-row items-iten  justify-between">
                     <CardTitle className="flex items-center gap-3">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-                        <Phone className="h-5 w-5 text-white" />
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+                        <Phone className="h-5 w-5  " />
                       </span>
                       <span className="text-base font-semibold">
                         Talk
                       </span>
                     </CardTitle>
                     <CardAction className={"self-center"}>
-                      <MoveRight className="text-secondary" />
+                      <MoveRight className=" " />
                     </CardAction>
                   </CardHeader>
                 </Link>
               </Card>
-              <Card>
+              <Card className={"active:scale-97"}>
                 <Link>
                   <CardHeader className="flex flex-row items-iten  justify-between">
                     <CardTitle className="flex items-center gap-3">
-                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
-                        <Phone className="h-5 w-5 text-white" />
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+                        <Phone className="h-5 w-5  " />
                       </span>
                       <span className="text-base font-semibold">
                         Talk
                       </span>
                     </CardTitle>
                     <CardAction className={"self-center"}>
-                      <MoveRight className="text-secondary" />
+                      <MoveRight className=" " />
                     </CardAction>
                   </CardHeader>
                 </Link>

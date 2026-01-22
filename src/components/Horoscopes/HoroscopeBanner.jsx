@@ -28,7 +28,7 @@ const HoroscopeBanner = ({ data, title }) => {
             <div className='container grid  md:grid-cols-2 gap-4'>
                 {data && data.length > 0 ? data.map((horoscope, index) => (
                     <Link to={`/horoscopes/${horoscope.type}/${horoscope.title.split(" ")[0].toLowerCase()}`} key={index}>
-                        <div  className='border flex gap-3 group items-center hover:scale-102 transition-all duration-500 hover:shadow shadow-primary border-secondary p-4 rounded-lg shadow-md'>
+                        <div  className='border flex gap-3 group items-center hover:scale-102 transition-all duration-500 hover:shadow border-primary p-4 rounded-lg shadow-md'>
                             <div>
                                 <img src={imgdata[index]} className='w-20 group-hover:rotate-360 duration-500 transition-all rounded-full' alt="" />
                             </div>

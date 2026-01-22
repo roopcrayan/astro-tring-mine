@@ -23,6 +23,7 @@ export const AstrologerLogin = createAsyncThunk(
     try {
       const res = await api.post("/astro/login", data);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role_id", res.data.astro.role_id);
       return res.data.astro;
     } catch (error) {
       return thunkApi.rejectWithValue(

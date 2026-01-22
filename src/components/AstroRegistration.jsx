@@ -13,6 +13,51 @@ import { User, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { AstrologerRegister } from "@/redux/slice/AstroAuth";
+import { Link } from "react-router-dom";
+const languages = [
+    { value: "english", label: "English" },
+    { value: "hindi", label: "Hindi" },
+    { value: "tamil", label: "Tamil" },
+    { value: "punjabi", label: "Punjabi" },
+    { value: "marathi", label: "Marathi" },
+    { value: "gujarati", label: "Gujarati" },
+    { value: "bengali", label: "Bengali" },
+    { value: "french", label: "French" },
+    { value: "odia", label: "Odia" },
+    { value: "telugu", label: "Telugu" },
+    { value: "kannada", label: "Kannada" },
+    { value: "malayalam", label: "Malayalam" },
+    { value: "sanskrit", label: "Sanskrit" },
+    { value: "assamese", label: "Assamese" },
+    { value: "german", label: "German" },
+    { value: "spanish", label: "Spanish" },
+    { value: "marwari", label: "Marwari" },
+    { value: "manipuri", label: "Manipuri" },
+    { value: "urdu", label: "Urdu" },
+    { value: "sindhi", label: "Sindhi" },
+    { value: "kashmiri", label: "Kashmiri" },
+    { value: "bodo", label: "Bodo" },
+    { value: "nepali", label: "Nepali" },
+    { value: "konkani", label: "Konkani" },
+    { value: "maithili", label: "Maithili" },
+    { value: "arabic", label: "Arabic" },
+    { value: "bhojpuri", label: "Bhojpuri" },
+    { value: "dutch", label: "Dutch" },
+    { value: "rajasthani", label: "Rajasthani" },
+];
+
+const categories = [
+    { value: "love", label: "Love" },
+    { value: "marriage", label: "Marriage" },
+    { value: "health", label: "Health" },
+    { value: "wealth", label: "Wealth" },
+    { value: "education", label: "Education" },
+    { value: "career", label: "Career" },
+    { value: "legal", label: "Legal" },
+    { value: "remedies", label: "Remedies" },
+    { value: "finance", label: "Finance" },
+    { value: "parents", label: "Parents" },
+];
 
 const AstroRegister = () => {
 
@@ -30,8 +75,8 @@ const AstroRegister = () => {
         daily_available_hours: "",
         expertise: [],
         languages: [],
-        chat_price: "",
-        call_price: "",
+        categories: [],
+
         image: null,
         imagePreview: "",
     });
@@ -54,6 +99,22 @@ const AstroRegister = () => {
             }));
         }
     };
+
+    const handleCategorySelect = (value) => {
+        if (!form.categories.includes(value)) {
+            setForm((prev) => ({
+                ...prev,
+                categories: [...prev.categories, value],
+            }));
+        }
+    };
+    const removeCategory = (value) => {
+        setForm((prev) => ({
+            ...prev,
+            categories: prev.categories.filter((cat) => cat !== value),
+        }));
+    };
+
 
     const removeExpertise = (value) => {
         setForm((prev) => ({
@@ -129,7 +190,7 @@ const AstroRegister = () => {
         try {
             const response = await dispatch(AstrologerRegister(submitData)).unwrap();
             toast.success("Registration successful!");
-            
+
             // Reset form after successful registration
             setForm({
                 name: "",
@@ -142,8 +203,8 @@ const AstroRegister = () => {
                 daily_available_hours: "",
                 expertise: [],
                 languages: [],
-                chat_price: "",
-                call_price: "",
+
+                categories: [],
                 image: null,
                 imagePreview: "",
             });
@@ -171,41 +232,41 @@ const AstroRegister = () => {
     return (
         <section>
             <div className="container">
-                <div className=" mb-10 mx-auto p-6 border border-primary rounded-lg mt-10">
+                <div className=" mb-10 mx-auto p-6 border border-black rounded-lg mt-10">
                     <h2 className="text-2xl text-center mb-6">Create Account</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        
+
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
                                 <Label style={labelStyle}>Name</Label>
-                                <Input name="name" value={form.name} onChange={handleChange} required />
+                                <Input name="name" placeholder="Enter your name" value={form.name} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <Label style={labelStyle}>Email</Label>
-                                <Input name="email" type="email" value={form.email} onChange={handleChange} required />
+                                <Input name="email" placeholder="Enter your email" type="email" value={form.email} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <Label style={labelStyle}>Mobile</Label>
-                                <Input name="mobile" value={form.mobile} maxLength={10} onChange={handleChange} required />
+                                <Input name="mobile" placeholder="Enter your mobile number" value={form.mobile} maxLength={10} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <Label style={labelStyle}>Username</Label>
-                                <Input name="username" value={form.username} onChange={handleChange} required />
+                                <Input name="username" placeholder="Enter your username" value={form.username} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <Label style={labelStyle}>Experience (Years)</Label>
-                                <Input type="number" name="experience" value={form.experience} onChange={handleChange} required />
+                                <Input type="number" placeholder="Enter your experience in years" name="experience" value={form.experience} onChange={handleChange} required />
                             </div>
 
                             <div>
                                 <Label style={labelStyle}>Daily Available Hours</Label>
-                                <Input type="number" name="daily_available_hours" value={form.daily_available_hours} onChange={handleChange} required />
+                                <Input type="number" placeholder="Enter your daily available hours" name="daily_available_hours" value={form.daily_available_hours} onChange={handleChange} required />
                             </div>
 
                             <div>
@@ -215,9 +276,24 @@ const AstroRegister = () => {
                                         <SelectValue placeholder="Select Expertise" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="Tarot">Tarot</SelectItem>
-                                        <SelectItem value="Vedic">Vedic</SelectItem>
-                                        <SelectItem value="Numerology">Numerology</SelectItem>
+                                        <SelectItem value="signature_reading">Signature Reading</SelectItem>
+                                        <SelectItem value="vedic">Vedic</SelectItem>
+                                        <SelectItem value="tarot">Tarot</SelectItem>
+                                        <SelectItem value="kp">KP</SelectItem>
+                                        <SelectItem value="numerology">Numerology</SelectItem>
+                                        <SelectItem value="lal_kitab">Lal Kitab</SelectItem>
+                                        <SelectItem value="psychic">Psychic</SelectItem>
+                                        <SelectItem value="palmistry">Palmistry</SelectItem>
+                                        <SelectItem value="cartomancy">Cartomancy</SelectItem>
+                                        <SelectItem value="prashana">Prashana</SelectItem>
+                                        <SelectItem value="loshu_grid">Loshu Grid</SelectItem>
+                                        <SelectItem value="nadi">Nadi</SelectItem>
+                                        <SelectItem value="face_reading">Face Reading</SelectItem>
+                                        <SelectItem value="horary">Horary</SelectItem>
+                                        <SelectItem value="life_coach">Life Coach</SelectItem>
+                                        <SelectItem value="western">Western</SelectItem>
+                                        <SelectItem value="gemology">Gemology</SelectItem>
+                                        <SelectItem value="vastu">Vastu</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 {form.expertise.length > 0 && (
@@ -245,10 +321,11 @@ const AstroRegister = () => {
                                         <SelectValue placeholder="Select Language" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="Hindi">Hindi</SelectItem>
-                                        <SelectItem value="English">English</SelectItem>
-                                        <SelectItem value="Bengali">Bengali</SelectItem>
-                                        <SelectItem value="Tamil">Tamil</SelectItem>
+                                        {languages.map((lang) => (
+                                            <SelectItem key={lang.value} value={lang.value}>
+                                                {lang.label}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                                 {form.languages.length > 0 && (
@@ -268,20 +345,46 @@ const AstroRegister = () => {
                                     </div>
                                 )}
                             </div>
-
                             <div>
-                                <Label style={labelStyle}>Chat Price (₹/min)</Label>
-                                <Input type="number" name="chat_price" value={form.chat_price} onChange={handleChange} required />
+                                <Label style={labelStyle}>Add Category</Label>
+
+                                <Select onValueChange={handleCategorySelect}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select Category" />
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat.value} value={cat.value}>
+                                                {cat.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+
+                                {form.categories.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {form.categories.map((cat) => (
+                                            <span
+                                                key={cat}
+                                                className="inline-flex items-center gap-1 bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm"
+                                            >
+                                                {cat}
+                                                <X
+                                                    className="w-4 h-4 cursor-pointer"
+                                                    onClick={() => removeCategory(cat)}
+                                                />
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
-                            <div>
-                                <Label style={labelStyle}>Call Price (₹/min)</Label>
-                                <Input type="number" name="call_price" value={form.call_price} onChange={handleChange} required />
-                            </div>
+
 
                             <div>
                                 <Label style={labelStyle}>Password</Label>
-                                <Input type="password" name="password" value={form.password} onChange={handleChange} required />
+                                <Input type="password" placeholder="Enter your password" name="password" value={form.password} onChange={handleChange} required />
                             </div>
 
                             <div>
@@ -289,6 +392,7 @@ const AstroRegister = () => {
                                 <Input
                                     type="password"
                                     name="confirmPassword"
+                                    placeholder="Confirm your password"
                                     value={form.confirmPassword}
                                     onChange={handleChange}
                                     required
@@ -296,14 +400,21 @@ const AstroRegister = () => {
                             </div>
                         </div>
 
-                        <Button 
-                            type="submit" 
-                            className="w-full bg-secondary text-white"
+                        <Button
+                            type="submit"
+                            className="w-full "
                             disabled={loading}
                         >
                             {loading ? "Registering..." : "Register"}
                         </Button>
                     </form>
+
+                    <p className="text-center text-sm mt-4">
+                        Already have an account?{" "}
+                        <Link to="/astro-login" className="text-black font-semibold hover:underline">
+                            Login here
+                        </Link>
+                    </p>
                 </div>
             </div>
         </section>

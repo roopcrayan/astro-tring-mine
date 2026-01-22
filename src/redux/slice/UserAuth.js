@@ -59,6 +59,7 @@ export const userProfile = createAsyncThunk(
             console.log(res.data.user)
             return res.data.user;
         } catch (error) {
+
             return thunkApi.rejectWithValue(
                 error.response?.data?.message || "Registration failed"
             );
@@ -67,25 +68,29 @@ export const userProfile = createAsyncThunk(
 );
 
 
+const tokenFromStorage = localStorage.getItem("token");
+
 const initialState = {
     user: null,
-    token: localStorage.getItem("token") || null,
+    token: tokenFromStorage,
     loading: false,
-    isLoggedIn: false,
+    isLoggedIn: !!tokenFromStorage, // ✅ IMPORTANT
     error: null,
 };
-
 const UserAuthSlice = createSlice({
     name: "userAuth",
     initialState,
     reducers: {
         logout: (state) => {
-            localStorage.removeItem("token");
-            state.token = null;;
-            state.isLoggedIn = false;
+            state.token = null;
             state.user = null;
+            state.isLoggedIn = false;
+            state.loading = false;
+            state.error = null;
+            localStorage.removeItem("token");
         },
     },
+
     extraReducers: (builder) => {
         builder
             // LOGIN
@@ -143,6 +148,7 @@ const UserAuthSlice = createSlice({
             .addCase(userUpdate.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+                state.user = null;
             });
     },
 });

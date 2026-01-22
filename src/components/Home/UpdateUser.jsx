@@ -85,13 +85,13 @@ const UpdateUser = () => {
     return (
         <section className="py-10">
             <div className="container ">
-                <Card className={"border-accent bg-secondary-foreground"}>
+                <Card className={"border border-black "}>
                     <CardContent>
 
 
                         {/* Avatar */}
                         <div className="text-center mb-8">
-                            <Avatar className="h-24 w-24 mx-auto mb-2">
+                            <Avatar className="h-24 w-24 border  border-gray-400  mx-auto mb-2">
                                 <AvatarImage src={user?.avatar || ""} />
                                 <AvatarFallback className="text-xl">
                                     {formData.name?.[0]}
@@ -217,7 +217,7 @@ const UpdateUser = () => {
                             <div className="flex justify-center pt-6">
                                 <Button
                                     type="submit"
-                                    className="px-10 rounded-full bg-secondary text-white "
+                                    className="px-10 rounded-full  "
                                 >
                                     Update Profile
                                 </Button>

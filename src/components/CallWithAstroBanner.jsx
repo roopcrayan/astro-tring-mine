@@ -16,7 +16,7 @@ const CallWithAstroBanner = () => {
       <div className="container">
         <HeadWithLogo title="Call And Chat with Astrologers" />
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mt-10">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 mt-10">
           {allastrologers
             .map((astro) => (
               <CallCard key={astro.id} {...astro} />

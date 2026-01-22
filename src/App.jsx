@@ -1,24 +1,31 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import UpdateUser from './components/Home/UpdateUser'
-import Layout from './layout/Layout'
-import Home from './pages/Home'
-import FreeKundli from './pages/kundli/FreeKundli'
-import ChatWithAstro from './pages/chatwithAstro/ChatWithAstro'
-import CallwithAstro from './pages/callwithAstro/callwithAstro'
+import { Route, Routes, useLocation } from "react-router-dom";
+import Layout from './layout/Layout';
 
 // import Astrodetails from './pages/AstrologerDetails'
-import AstrologerDetails from './pages/AstrologerDetails'
-import AstroLogin from "./components/AstroLogin";
-import AstroRegister from "./components/AstroRegistration";
-import HoroscopeDetails from "./components/Horoscopes/HoroscopeDetails";
-import Horoscopes from "./pages/Horoscopes";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 import AstroLayout from "./layout/AstroLayout";
-import Dashboard from "./pages/AstroDashboard/Dashboard";
-import UpdateAstro from "./pages/AstroDashboard/UpdateAstro";
-import { useDispatch, useSelector } from "react-redux";
 import { GetAllAstrologer } from "./redux/slice/AstroAuth";
+ 
 // import BlogPage from "./pages/BlogPage";
+
+const Home = lazy(() => import("./pages/Home"));
+const FreeKundli = lazy(() => import("./pages/kundli/FreeKundli"));
+const Blog = lazy(() => import("./pages/Blog/Blog"));
+const BlogDetails = lazy(() => import("./pages/Blog/BlogDetails"));
+const ChatWithAstro = lazy(() => import("./pages/chatwithAstro/ChatWithAstro"));
+const CallwithAstro = lazy(() => import("./pages/callwithAstro/callwithAstro"));
+const AstrologerDetails = lazy(() => import("./pages/AstrologerDetails"));
+const AstroLogin = lazy(() => import("./components/AstroLogin"));
+const AstroRegister = lazy(() => import("./components/AstroRegistration"));
+const HoroscopeDetails = lazy(() => import("./components/Horoscopes/HoroscopeDetails"));
+const Horoscopes = lazy(() => import("./pages/Horoscopes"));
+const Dashboard = lazy(() => import("./pages/AstroDashboard/Dashboard"));
+const UpdateAstro = lazy(() => import("./pages/AstroDashboard/UpdateAstro"));
+const UpdateUser = lazy(() => import("./components/Home/UpdateUser"));
+
+
 
 
 const App = () => {
@@ -41,35 +48,33 @@ const App = () => {
 
   return (
     <>
-
-      <Routes>
-
-
-
-        <Route path='/' element={<Layout />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/free-kundli' element={<FreeKundli />} />
-          <Route path='/update-user' element={<UpdateUser />} />
-          {/* <Route path='/chat-with-astrologer' element={<ChatWithAstro />} /> */}
-          <Route path='/talk-to-astrologer' element={<CallwithAstro />} />
-          <Route path='/astro-register' element={<AstroRegister />} />
-          <Route path='/horoscopes/:date' element={<Horoscopes />} />
-          <Route path='/horoscopes/:time/:horos' element={<HoroscopeDetails />} />
-          <Route path='/astro-login' element={<AstroLogin />} />
-          {/* <Route path="/blogs" element={<BlogPage />} /> */}
-          {/* <Route path="/blog/:id" element={<BlogDetails />} /> */}
-        </Route>
+      <Suspense fallback={<div className="text-center py-10">Loading...</div>}>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/free-kundli' element={<FreeKundli />} />
+            <Route path='/update-user' element={<UpdateUser />} />
+            {/* <Route path='/chat-with-astrologer' element={<ChatWithAstro />} /> */}
+            <Route path='/talk-to-astrologer' element={<CallwithAstro />} />
+            <Route path='/horoscopes/:date' element={<Horoscopes />} />
+            <Route path='/horoscopes/:time/:horos' element={<HoroscopeDetails />} />
+            <Route path='/astro-login' element={<AstroLogin />} />
+            <Route path='/astro-register' element={<AstroRegister />} />
+            <Route path="/blogs" element={<Blog />} />
+            <Route path="/blogs/:id" element={<BlogDetails />} />
+          </Route>
 
 
 
-        <Route path="/astro" element={<AstroLayout />}>
-          <Route path="/astro/dashboard" element={<Dashboard />} />
-          <Route path="/astro/update-astro" element={<UpdateAstro />} />
-        </Route>
+          <Route path="/astro" element={<AstroLayout />}>
+            <Route path="/astro/dashboard" element={<Dashboard />} />
+            <Route path="/astro/update-astro" element={<UpdateAstro />} />
+          </Route>
 
 
 
-      </Routes>
+        </Routes>
+      </Suspense>
     </>
   )
 }

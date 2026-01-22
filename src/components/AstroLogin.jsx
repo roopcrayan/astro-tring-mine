@@ -70,7 +70,7 @@ const AstroLogin = () => {
     return (
         <section>
             <div className="container">
-                <div className="max-w-md mb-10 mx-auto p-6 border border-primary rounded-lg mt-10">
+                <div className="max-w-md mb-10 mx-auto p-6 border border-black rounded-lg mt-10">
                     <h2 className="text-2xl text-center mb-6">Astrologer Login</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -99,7 +99,7 @@ const AstroLogin = () => {
 
                         <Button
                             type="submit"
-                            className="w-full bg-secondary text-white"
+                            className="w-full "
                             disabled={loading}
                         >
                             {loading ? "Logging in..." : "Login"}
@@ -107,7 +107,7 @@ const AstroLogin = () => {
 
                         <p className="text-center text-sm mt-4">
                             Don't have an account?{" "}
-                            <Link to="/astrologer/register" className="text-secondary font-semibold hover:underline">
+                            <Link to="/astro-register" className="text-black font-semibold hover:underline">
                                 Register here
                             </Link>
                         </p>

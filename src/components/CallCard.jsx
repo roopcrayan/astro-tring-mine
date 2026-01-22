@@ -6,29 +6,31 @@ import { Link } from 'react-router-dom';
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoCall } from "react-icons/io5";
 
-export default function CallCard({ 
-    call_price, 
-    chat_price, 
-    experience, 
-    expertise = [], 
-    id, 
-    is_online, 
-    languages = [], 
-    name, 
-    profile_image, 
-    rating = 0, 
-    rating_count = 0, 
-    total_call_duration_sec = 0, 
-    total_chat_duration_sec = 0, 
-    username 
+export default function CallCard({
+    call_price,
+    chat_price,
+    experience,
+    expertise = [],
+    id,
+    is_online,
+    languages = [],
+    name,
+    profile_image,
+    rating = 0,
+    rating_count = 0,
+    total_call_duration_sec = 0,
+    total_chat_duration_sec = 0,
+    username
 }) {
     const totalOrders = total_call_duration_sec + total_chat_duration_sec;
     const displayRating = Math.min(Math.max(Math.round(rating), 0), 5);
 
     return (
-        <Card className="w-full max-w-md mx-auto hover:shadow-lg transition-shadow duration-200">
+        <Card className="w-full max-w-md mx-auto hover:shadow-lg rounded-br-4xl rounded-bl-0! rounded-tl-4xl rounded-tr-0! 
+          
+        transition-shadow duration-200">
             <CardContent className="p-4">
-                <div className="flex gap-4">
+                <div className="flex space-x-1">
                     {/* Profile Section */}
                     <div className="flex flex-col items-center shrink-0">
                         <div className="relative mb-2">
@@ -49,28 +51,27 @@ export default function CallCard({
                                 <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
                             )}
                         </div>
-                        
+
                         {/* Rating Stars */}
                         <div className="flex gap-0.5 mb-1">
                             {[...Array(5)].map((_, i) => (
                                 <Star
                                     key={i}
-                                    className={`w-3.5 h-3.5 ${
-                                        i < displayRating 
-                                            ? 'fill-yellow-400 text-yellow-400' 
+                                    className={`w-3.5 h-3.5 ${i < displayRating
+                                            ? 'fill-yellow-400 text-yellow-400'
                                             : 'fill-gray-200 text-gray-200'
-                                    }`}
+                                        }`}
                                 />
                             ))}
                         </div>
-                        
+
                         {/* Rating Count */}
                         {rating_count > 0 && (
                             <div className="text-xs text-gray-500 mb-1">
                                 ({rating_count} reviews)
                             </div>
                         )}
-                        
+
                         {/* Orders */}
                         <div className="text-xs text-gray-600 font-medium">
                             {totalOrders} orders
@@ -81,9 +82,9 @@ export default function CallCard({
                     <div className="flex-1 min-w-0">
                         {/* Name and Status */}
                         <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
+                            <div className="flex flex-col ">
                                 <Link to={`/astro-details/${id}`} className="hover:underline">
-                                    <h4 className="font-semibold text-secondary text-lg text-gray-900 truncate">
+                                    <h4 className="font-semibold text-black text-lg  truncate">
                                         {name}
                                     </h4>
                                 </Link>
@@ -98,28 +99,28 @@ export default function CallCard({
 
                         {/* Expertise */}
                         {expertise.length > 0 && (
-                            <p className="text-sm! text-gray-700 mb-1  ">
+                            <p className="text-sm!   mb-1 line-clamp-1  ">
                                 {expertise.join('\n •  ')}
                             </p>
                         )}
 
                         {/* Languages */}
                         {languages.length > 0 && (
-                            <p className="text-xs text-gray-500 mb-3">
+                            <p className="text-xs text-gray-600 mb-1 ">
                                 {languages.join(', ')}
                             </p>
                         )}
 
                         {/* Experience */}
-                        <div className="flex items-center gap-1 text-sm text-gray-600 mb-1">
+                        <div className="flex items-center gap-1 text-xs! text-gray-600 mb-3">
                             <Clock className="w-4 h-4" />
-                            <span>Experience: {experience} {experience === 1 ? 'year' : 'years'}</span>
+                            <span className="text-xs! ">Experience: {experience} {experience === 1 ? 'year' : 'years'}</span>
                         </div>
 
                         {/* Pricing and Actions */}
                         <div className="flex items-end justify-between gap-1">
                             {/* Prices */}
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col ">
                                 <div className="flex  items-center gap-1 ">
                                     <div className="flex items-center text-green-600 font-semibold">
                                         <IndianRupee className="w-4 h-4" />
@@ -156,6 +157,7 @@ export default function CallCard({
                                 </Button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </CardContent>

@@ -163,7 +163,7 @@ const UserLogin = ({ ele }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="text-white flex gap-2">
+        <Button className=" flex gap-2">
           <User />
           {ele?.name || "Account"}
         </Button>
@@ -171,8 +171,8 @@ const UserLogin = ({ ele }) => {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-center text-secondary">
-            <h2 className="text-2xl">
+          <DialogTitle className="text-center ">
+            <h2 className="text-2xl text-black">
               {mode === "login" ? "Login" : "Create Account"}
             </h2>
           </DialogTitle>
@@ -213,14 +213,14 @@ const UserLogin = ({ ele }) => {
               )}
             </div>
 
-            <Button className="w-full bg-secondary text-white" disabled={loading}>
+            <Button className="w-full  text-black" disabled={loading}>
               {loading ? "Logging in..." : "Login"}
             </Button>
 
             <p className="text-center text-sm">
               Don't have an account?{" "}
               <span
-                className="text-secondary cursor-pointer"
+                className="text-black underline  cursor-pointer"
                 onClick={() => {
                   setMode("signup");
                   setErrors({ fields: {}, form: "" });
@@ -318,14 +318,14 @@ const UserLogin = ({ ele }) => {
               </div>
             </div>
 
-            <Button className="w-full bg-secondary text-white" disabled={loading}>
+            <Button className="w-full  " disabled={loading}>
               {loading ? "Creating..." : "Sign Up"}
             </Button>
 
             <p className="text-center text-sm mt-2">
               Already have an account?{" "}
               <span
-                className="text-secondary cursor-pointer"
+                className=" text-black underline font-semibold cursor-pointer"
                 onClick={() => {
                   setMode("login");
                   setErrors({ fields: {}, form: "" });

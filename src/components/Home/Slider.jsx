@@ -19,8 +19,8 @@ const Slider = ({ children , slideCount}) => {
             <button
                 ref={prevRef}
                 className="absolute lg:-left-8 -left-2 top-1/2 z-10 -translate-y-1/2
-                   bg-secondary text-white shadow-md rounded-full w-10 h-10
-                   flex items-center justify-center "
+                   bg-primary text-black shadow-md rounded-full w-10 h-10
+                   md:flex hidden items-center justify-center "
             >
                 <FaArrowLeft />
             </button>
@@ -28,8 +28,8 @@ const Slider = ({ children , slideCount}) => {
             <button
                 ref={nextRef}
                 className="absolute lg:-right-8 -right-2 top-1/2 z-10 -translate-y-1/2
-                   bg-secondary text-white shadow-md rounded-full w-10 h-10
-                   flex items-center justify-center "
+                   bg-primary text-black shadow-md rounded-full w-10 h-10
+                   md:flex hidden items-center justify-center "
             >
                 <FaArrowRight />
             </button>

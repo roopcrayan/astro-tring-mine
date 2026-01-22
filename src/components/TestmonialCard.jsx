@@ -14,7 +14,7 @@ const TestmonialCard = ({ id, name, avatar, rating, service, message }) => {
                 </div>
 
                 {/* Testimonial Text */}
-                <p className="text-sm text-muted-foreground leading-relaxed ">
+                <p className="text-sm text-gray-900 leading-relaxed">
                     “{message}”
 
                 </p>
