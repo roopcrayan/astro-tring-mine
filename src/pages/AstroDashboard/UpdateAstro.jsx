@@ -277,7 +277,7 @@ function UpdateAstro() {
                     <User className="w-4 h-4 text-slate-500" />
                     Gender
                   </Label>
-                  <Select value={formData.gender} onValueChange={(v) => setFormData((p) => ({ ...p, gender: v }))}>
+                  <Select value={formData.gender}  onValueChange={(v) => setFormData((p) => ({ ...p, gender: v }))}>
                     <SelectTrigger className="border-slate-200 w-full focus:border-indigo-400 focus:ring-indigo-200">
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
@@ -289,11 +289,11 @@ function UpdateAstro() {
                   </Select>
                 </div>
               </div>
+ 
 
 
-
-              {role != 2 &&
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* {role != 2 && */}
+                <div className="grid hidden grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField
                     label="Date of Birth"
                     name="dob"
@@ -319,7 +319,7 @@ function UpdateAstro() {
                     onChange={handleInputChange}
                   />
                 </div>
-              }
+              {/* } */}
             </CardContent>
           </Card>
 

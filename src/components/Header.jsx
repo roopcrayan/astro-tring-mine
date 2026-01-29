@@ -117,12 +117,16 @@ const Header = () => {
     const role = localStorage.getItem("role_id")
     if (token) {
       if (role == 2) {
-        dispatch(AstrologerProfile())
+        if (!astrologer) {
+          dispatch(AstrologerProfile())
+        }
       } else {
-        dispatch(userProfile());
+        if (!user) {
+          dispatch(userProfile());
+        }
       }
     }
-  }, [token, dispatch]);
+  }, [token, dispatch, user, astrologer]);
 
 
   /* ------------------ STORAGE SYNC (MULTI TAB LOGOUT) ------------------ */
@@ -204,8 +208,10 @@ const Header = () => {
   }
 
   useEffect(() => {
-    getHorescopes()
-  }, [])
+    if (!horoscope) {
+      getHorescopes()
+    }
+  }, [horoscope])
 
   useEffect(() => {
     if (horoscope?.length > 0) {
@@ -279,7 +285,7 @@ const Header = () => {
 
           {/* AUTH SECTION */}
           <div>
-            {(token && (user?.username || astrologer?.username)) ? (
+            {(localStorage.getItem("token") && (user?.username || astrologer?.username)) ? (
               <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -360,7 +366,7 @@ const Header = () => {
             </SheetHeader>
             <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
               <MobileNavSection navItems={mobileMenus} />
-              {(token && (user?.username || astrologer?.username)) ? (
+              {(localStorage.getItem("token") && (user?.username || astrologer?.username)) ? (
                 <div className="mt-4 px-2 space-y-2">
                   <div className="flex items-center gap-3 p-2 border rounded-md">
                     <Avatar className="h-10 w-10">

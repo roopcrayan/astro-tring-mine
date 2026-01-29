@@ -28,22 +28,7 @@ const NavbarAstro = () => {
     const { toggleSidebar } = useSidebar();
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { astrologer, loading } = useSelector(
-        (state) => state.astroAuth
-    );
-    const { token, user } = useSelector((state) => state.userAuth);
-    const hasFetched = useRef(false);
-
-    const role = localStorage.getItem("role_id")
-
-    useEffect(() => {
-        if (!token) return;
-        if (role == 2) {
-            dispatch(AstrologerProfile());
-        } else {
-            dispatch(userProfile());
-        }
-    }, [token, role, dispatch]);
+    const { astrologer } = useSelector((state) => state.astroAuth);
 
     const LogoutAstro = async () => {
         toast.success('Astrologer logged out', {
@@ -139,9 +124,9 @@ const NavbarAstro = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                                     <Avatar className="h-10 w-10">
-                                        <AvatarImage src={user?.avatar || astrologer?.avatar} alt={user?.username} />
+                                        <AvatarImage src={astrologer?.avatar} alt={astrologer?.avatar} />
                                         <AvatarFallback className="bg-purple-600 text-white">
-                                            {astrologer?.username.charAt(0).toUpperCase() || user?.username.charAt(0).toUpperCase()}
+                                            {astrologer?.username.charAt(0).toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
@@ -149,9 +134,9 @@ const NavbarAstro = () => {
                             <DropdownMenuContent align="end" className="w-auto">
                                 <DropdownMenuLabel>
                                     <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium">{user?.username || astrologer?.username}</p>
+                                        <p className="text-sm font-medium">{astrologer?.username}</p>
                                         <p className="text-xs text-muted-foreground">
-                                            {user?.email || astrologer?.email}
+                                            {astrologer?.email}
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>
@@ -164,11 +149,11 @@ const NavbarAstro = () => {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                {astrologer?.role_id === 2 && <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={LogoutAstro}>
+                                <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={LogoutAstro}>
                                     <LogOut className="mr-2 h-4 w-4" />
                                     Log out
                                 </DropdownMenuItem>
-                                }
+
                             </DropdownMenuContent>
                         </DropdownMenu>
 

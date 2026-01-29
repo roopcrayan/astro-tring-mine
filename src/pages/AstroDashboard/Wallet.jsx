@@ -6,7 +6,9 @@ import { Separator } from '@/components/ui/separator';
 import { useSelector } from 'react-redux';
 
 function WalletDashboard() {
-  const astrologer = useSelector(state => state.astroAuth.astrologer);
+  const { astrologer } = useSelector((state) => state.astroAuth);
+
+   
   const walletData = astrologer?.wallet || {
     balance: "0.00",
     created_at: "2026-01-19T12:19:58.000000Z",

@@ -99,6 +99,7 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("token"),
   astrologer: null,
   allastrologers: [],
+  token:localStorage.getItem("token") || " ",
   loading: false,
   error: null,
 };

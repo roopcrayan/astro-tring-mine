@@ -2,17 +2,16 @@ import { AppSidebar } from '@/components/Dashboard/AppSidebar';
 import NavbarAstro from '@/components/Dashboard/NavbarAstro';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const AstroLayout = () => {
   const navigate = useNavigate();
   const toastShown = useRef(false);
-  const dispatch = useDispatch();
 
-  const { loading } = useSelector((state) => state.astroAuth);
-  const { token } = useSelector((state) => state.userAuth);
+
+  const { astrologer, token, loading } = useSelector((state) => state.astroAuth);
 
   // get role safely
 
@@ -22,13 +21,13 @@ const AstroLayout = () => {
       toast.error("Please login first");
       navigate("/", { replace: true });
     }
-  }, [token, navigate]);
+  }, []);
 
   if (loading) {
     return <p className="text-center">loading...</p>;
   }
 
-  if (!token) return navigate("/");
+  if (!astrologer) return navigate("/");
 
   return (
     <SidebarProvider>
