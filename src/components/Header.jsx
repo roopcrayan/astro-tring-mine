@@ -104,7 +104,7 @@ const Header = () => {
     // { name: "Chat with Astrologer", path: "/chat-with-astrologer", type: "link", hasmenu: false },
     { name: "Talk / Call to Astrologer", path: "/talk-to-astrologer", type: "link", hasmenu: false },
     {
-      name: "Shop", path: "", type: "link", hasmenu: true, menu: [
+      name: "Store", path: "https://store.adkrayons.com/", type: "link", hasmenu: false, menu: [
         { label: "Gemstones", path: "/astromall/gemstones" },
         { label: "Yantras", path: "/astromall/yantras" },
       ]
