@@ -28,6 +28,8 @@ const UpdateUser = lazy(() => import("./components/Home/UpdateUser"));
 const Dashboard = lazy(() => import("./pages/AstroDashboard/Dashboard"));
 const UpdateAstro = lazy(() => import("./pages/AstroDashboard/UpdateAstro"));
 const Wallet = lazy(() => import("./pages/AstroDashboard/Wallet"));
+const WidhdrowHistory = lazy(() => import("./pages/AstroDashboard/WidhdrowHistory"));
+
 
 
 
@@ -71,13 +73,14 @@ const App = () => {
 
 
 
-          <Route path="/astro" element={<AstroLayout />}>
-            <Route path="/astro/dashboard" element={<Dashboard />} />
-            <Route path="/astro/update-astro" element={<UpdateAstro />} />
-            <Route path="/astro/wallet" element={<Wallet />} />
+          <Route path="/dashboard" element={<AstroLayout />}>
+            <Route path="/dashboard/profile" element={<Dashboard />} />
+            <Route path="/dashboard/update-astro" element={<UpdateAstro />} />
+            <Route path="/dashboard/wallet" element={<Wallet />} />
+            <Route path="/dashboard/widhdrow-history" element={<WidhdrowHistory />} />
           </Route>
 
-
+          
 
         </Routes>
       </Suspense>

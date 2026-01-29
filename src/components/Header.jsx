@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { logout, userProfile } from "@/redux/slice/UserAuth"
+import { logout, userLogout, userProfile } from "@/redux/slice/UserAuth"
 import { ChevronDown, Menu, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { GiStarShuriken } from "react-icons/gi"
@@ -15,11 +15,76 @@ import UserLogin from "./UserLogin"
 import { getHoroscope } from "@/redux/slice/HoroscopesSlice"
 import { AstrologerLogout, AstrologerProfile, GetAllAstrologer } from "@/redux/slice/AstroAuth"
 
+// Move MobileNavSection outside the main component
+const MobileNavSection = ({ navItems, title }) => {
+  const [openIndex, setOpenIndex] = useState(null)
 
+  const toggleMenu = (index) => {
+    setOpenIndex(openIndex === index ? null : index)
+  }
+
+  return (
+    <div className="space-y-1">
+      {navItems.map((item, index) => {
+        if (item.type === "btn") return null
+
+        return (
+          <div key={index}>
+            <div
+              className="flex items-center justify-between px-2 py-2 text-sm font-medium cursor-pointer rounded-md"
+              onClick={item.hasmenu ? () => toggleMenu(index) : undefined}
+            >
+              {!item.hasmenu ? (
+                <SheetClose asChild >
+                  <Link to={item.path} className="flex items-center">
+                    <GiStarShuriken className=" text-primary size-4 me-2" />
+                    {item.name}
+                  </Link>
+                </SheetClose>
+              ) : (
+                <>
+                  <span className="flex items-center">  <GiStarShuriken className=" text-primary size-4 me-2" />
+                    {item.name}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""
+                      }`}
+                  />
+                </>
+              )}
+            </div>
+
+            {/* Dropdown with Transition */}
+            {item.hasmenu && (
+              <div
+                className={`overflow-hidden transition-all duration-200 ${openIndex === index ? "max-h-96" : "max-h-0"
+                  }`}
+              >
+                <div className="ml-4 mt-1 space-y-1 border-l border-accent pl-2">
+                  {item.menu.map((menuItem, menuIndex) => (
+                    <SheetClose asChild key={menuIndex}>
+                      <Link
+                        to={menuItem.path}
+                        className="flex px-2 py-1.5 text-sm   rounded-md"
+                      >
+                        <GiStarShuriken className=" text-primary size-4 me-2" />
+                        {menuItem.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState({ row: null, index: null });
   const [horosType, setHorosType] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const { token, user } = useSelector((state) => state.userAuth);
@@ -49,9 +114,13 @@ const Header = () => {
 
   /* ------------------ FETCH USER WHEN TOKEN EXISTS ------------------ */
   useEffect(() => {
+    const role = localStorage.getItem("role_id")
     if (token) {
-      dispatch(userProfile());
-      dispatch(AstrologerProfile())
+      if (role == 2) {
+        dispatch(AstrologerProfile())
+      } else {
+        dispatch(userProfile());
+      }
     }
   }, [token, dispatch]);
 
@@ -70,18 +139,30 @@ const Header = () => {
   }, [dispatch]);
 
   /* ------------------ LOGOUT ------------------ */
+  const logoutUser = async () => {
+    setIsDropdownOpen(false);
+    const role = localStorage.getItem("role_id")
+    try {
+      if (role == 2) {
+        await dispatch(AstrologerLogout()).unwrap();
+      } else {
+        await dispatch(userLogout()).unwrap();
+      }
 
+      localStorage.removeItem("token")
+      localStorage.removeItem("role_id")
 
-  const logoutUser = () => {
-    dispatch(logout());
+      toast.success("You are logged out", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "light",
+      });
 
-    toast.success("You are logged out", {
-      position: "top-right",
-      autoClose: 3000,
-      theme: "light",
-    });
-    window.location.href = window.location.href
+      navigate("/");
 
+    } catch (error) {
+      toast.error(error || "Logout failed");
+    }
   };
 
 
@@ -90,17 +171,7 @@ const Header = () => {
   }
 
   const LogoutAstro = async () => {
-    toast.success('Astrologer logged out', {
-      position: "top-right",
-      autoClose: 5000,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "light",
-    });
-    await dispatch(AstrologerLogout()).unwrap();
-    localStorage.removeItem("token");
-    localStorage.removeItem("role_id");
-    // await fatchAstrologers();
+
   }
 
   const getHorescopes = async () => {
@@ -143,6 +214,16 @@ const Header = () => {
   }, [horoscope])
 
   const mobileMenus = [...Navrow2]
+
+  // Handle dropdown item clicks
+  const handleDropdownItemClick = (callback) => {
+    return () => {
+      if (callback) {
+        callback();
+      }
+      setIsDropdownOpen(false);
+    };
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -198,31 +279,60 @@ const Header = () => {
 
           {/* AUTH SECTION */}
           <div>
-            {token && user?.username || astrologer?.username ? (
-              <DropdownMenu>
+            {(token && (user?.username || astrologer?.username)) ? (
+              <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.avatar || astrologer?.avatar} alt={user?.username} />
+                      <AvatarImage
+                        src={user?.avatar || astrologer?.profile_image}
+                        alt={user?.username || astrologer?.username}
+                      />
                       <AvatarFallback>
-                        {astrologer?.username.charAt(0).toUpperCase() || user?.username.charAt(0).toUpperCase()}
+                        {(astrologer?.username?.charAt(0) || user?.username?.charAt(0) || 'U').toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
-                    <Link to="/update-user">
+                    <Link
+                      to="/update-user"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{user?.username || astrologer?.username}</p>
+                        <p className="text-sm font-medium leading-none">
+                          {user?.username || astrologer?.username}
+                        </p>
                       </div>
                     </Link>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
 
-                  {astrologer?.role_id === 2 && <DropdownMenuItem className={"cursor-pointer"} onClick={() => navigate('/astro/dashboard')}>Dashboard</DropdownMenuItem>}
-                  {astrologer?.role_id === 3 && <DropdownMenuItem className={"cursor-pointer"} onClick={logoutUser}>Logout</DropdownMenuItem>}
-                  {astrologer?.role_id === 2 && <DropdownMenuItem className={"cursor-pointer"} onClick={LogoutAstro}>AstrologerLogout</DropdownMenuItem>}
+
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleDropdownItemClick(() => navigate('/dashboard/profile'))}
+                  >
+                    Dashboard
+                  </DropdownMenuItem>
+
+                  {/* {localStorage.getItem("role_id") !== "2" && ( */}
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={handleDropdownItemClick(logoutUser)}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                  {/* )} */}
+                  {/* {localStorage.getItem("role_id") === "2" && (
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={handleDropdownItemClick(LogoutAstro)}
+                    >
+                      Astrologer Logout
+                    </DropdownMenuItem>
+                  )} */}
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -250,22 +360,50 @@ const Header = () => {
             </SheetHeader>
             <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
               <MobileNavSection navItems={mobileMenus} />
-              {token && user?.username || astrologer?.username ? (
+              {(token && (user?.username || astrologer?.username)) ? (
                 <div className="mt-4 px-2 space-y-2">
                   <div className="flex items-center gap-3 p-2 border rounded-md">
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={user?.avatar} alt={user?.username} />
+                      <AvatarImage
+                        src={user?.avatar || astrologer?.profile_image}
+                        alt={user?.username || astrologer?.username}
+                      />
                       <AvatarFallback>
-                        {astrologer?.username.charAt(0).toUpperCase() || user?.username.charAt(0).toUpperCase()}
+                        {(astrologer?.username?.charAt(0) || user?.username?.charAt(0) || 'U').toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                       <p className="text-sm font-medium">{user?.username || astrologer?.username}</p>
                     </div>
                   </div>
-                  <Button onClick={logoutUser} variant="outline" className="w-full">
-                    Logout
-                  </Button>
+                  {localStorage.getItem("role_id") === "2" ? (
+                    <>
+                      <SheetClose asChild>
+                        <Button
+                          onClick={() => navigate('/astro/dashboard')}
+                          variant="outline"
+                          className="w-full"
+                        >
+                          Dashboard
+                        </Button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button
+                          onClick={LogoutAstro}
+                          variant="outline"
+                          className="w-full"
+                        >
+                          Astrologer Logout
+                        </Button>
+                      </SheetClose>
+                    </>
+                  ) : (
+                    <SheetClose asChild>
+                      <Button onClick={logoutUser} variant="outline" className="w-full">
+                        Logout
+                      </Button>
+                    </SheetClose>
+                  )}
                 </div>
               ) : (
                 <div className="mt-4 px-2">
@@ -281,69 +419,3 @@ const Header = () => {
 };
 
 export default Header;
-
-const MobileNavSection = ({ navItems, title }) => {
-  const [openIndex, setOpenIndex] = useState(null)
-
-  const toggleMenu = (index) => {
-    setOpenIndex(openIndex === index ? null : index)
-  }
-
-  return (
-    <div className="space-y-1">
-      {navItems.map((item, index) => {
-        if (item.type === "btn") return null
-
-        return (
-          <div key={index}>
-            <div
-              className="flex items-center justify-between px-2 py-2 text-sm font-medium cursor-pointer rounded-md"
-              onClick={item.hasmenu ? () => toggleMenu(index) : undefined}
-            >
-              {!item.hasmenu ? (
-                <SheetClose asChild >
-                  <Link to={item.path} className="flex items-center">
-                    <GiStarShuriken className=" text-primary size-4 me-2" />
-                    {item.name}
-                  </Link>
-                </SheetClose>
-              ) : (
-                <>
-                  <span className="flex items-center">  <GiStarShuriken className=" text-primary size-4 me-2" />
-                    {item.name}</span>
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${openIndex === index ? "rotate-180" : ""
-                      }`}
-                  />
-                </>
-              )}
-            </div>
-
-            {/* Dropdown with Transition */}
-            {item.hasmenu && (
-              <div
-                className={`overflow-hidden transition-all duration-200 ${openIndex === index ? "max-h-96" : "max-h-0"
-                  }`}
-              >
-                <div className="ml-4 mt-1 space-y-1 border-l border-accent pl-2">
-                  {item.menu.map((menuItem, menuIndex) => (
-                    <SheetClose asChild >
-                      <Link
-                        key={menuIndex}
-                        to={menuItem.path}
-                        className="flex px-2 py-1.5 text-sm   rounded-md"
-                      >
-                        <GiStarShuriken className=" text-primary size-4 me-2" />
-                        {menuItem.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )
-      })}
-    </div>
-  )
-}

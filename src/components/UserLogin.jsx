@@ -17,6 +17,7 @@ import { userLogin, userRegister } from "@/redux/slice/UserAuth";
 import { toast } from "react-toastify";
 import { PhoneInput } from "./ui/phone-input";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { AstrologerProfile } from "@/redux/slice/AstroAuth";
 
 /* ---------------- ZOD SCHEMAS ---------------- */
 
@@ -120,6 +121,7 @@ const UserLogin = ({ ele }) => {
         toast.success("You are logged in");
       }
       setOpen(false);
+      await dispatch(AstrologerProfile()).unwrap()
     } catch (err) {
       setErrors({
         fields: {},

@@ -125,7 +125,7 @@ const ChatWithAstroBanner = () => {
         }
     ];
 
-    return (
+    return ( 
         <section>
             <div className="container">
 

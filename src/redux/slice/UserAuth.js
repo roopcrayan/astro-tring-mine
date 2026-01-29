@@ -14,6 +14,8 @@ export const userLogin = createAsyncThunk(
                 );
             } else {
                 localStorage.setItem("token", res.data.token);
+                localStorage.getItem("role_id", res.data.user.role_id)
+                // localStorage.setItem("token", res.data.token);
                 return res.data.token;
             }
         } catch (error) {
@@ -51,12 +53,25 @@ export const userUpdate = createAsyncThunk(
         }
     }
 );
+export const userLogout = createAsyncThunk(
+    "user/logout",
+    async (data, thunkApi) => {
+        try {
+            const res = await api.post("/user/logout", data);
+            console.log(res.data)
+            return res.data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(
+                error.response?.data?.message || "Registration failed"
+            );
+        }
+    }
+);
 export const userProfile = createAsyncThunk(
     "user/profile",
     async (data, thunkApi) => {
         try {
             const res = await api.get("/user/profile");
-            console.log(res.data.user)
             return res.data.user;
         } catch (error) {
 
@@ -138,6 +153,23 @@ const UserAuthSlice = createSlice({
                 state.error = action.payload;
             })
             // update user
+            .addCase(userLogout.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(userLogout.fulfilled, (state, action) => {
+                state.token = null;
+                state.user = null;
+                state.isLoggedIn = false;
+                state.loading = false;
+                state.error = null;
+                localStorage.removeItem("token");
+            })
+            .addCase(userLogout.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.user = null;
+            })
             .addCase(userUpdate.pending, (state) => {
                 state.loading = true;
                 state.error = null;

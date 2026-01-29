@@ -1,48 +1,28 @@
 
 
 
-import React from 'react';
-import { User, Mail, Phone, MapPin, Calendar, Briefcase, Star, Languages, Award, Clock, Shield, Globe, MessageSquare, PhoneCall } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Award, Briefcase, Calendar, Clock, Globe, Languages, Mail, MapPin, MessageSquare, Phone, PhoneCall, Shield, Star, User } from 'lucide-react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 function Dashboard() {
 
-  const { astrologer } = useSelector(state => state.astroAuth)
-  // console.log(a.astrologer)
+  const { astrologer, loading } = useSelector(state => state.astroAuth)
+  const { user, loading: userLoading } = useSelector(state => state.astroAuth)
 
-  // const astrologer = {
-  //   name: "Sharvan Rajput",
-  //   username: "sharvan 1234",
-  //   code: "SHA0005",
-  //   email: "sharvazxcfasdfnrajput098@gmail.com",
-  //   mobile: "1235495165",
-  //   countryCode: "+91",
-  //   gender: null,
-  //   dob: null,
-  //   birthPlace: null,
-  //   birthTime: null,
-  //   about: null,
-  //   address: null,
-  //   pincode: null,
-  //   experience: 2,
-  //   expertise: ['tarot', 'vastu'],
-  //   languages: ['english', 'bengali'],
-  //   category: ['love', 'marriage', 'health'],
-  //   chatPrice: "5.00",
-  //   callPrice: "5.00",
-  //   rating: "0.00",
-  //   ratingCount: 0,
-  //   isVerified: false,
-  //   isOnline: true,
-  //   profileImage: "9a699f6f84.webp",
-  //   lastSeenAt: "2026-01-23 10:22:31",
-  //   createdAt: "2026-01-19T12:19:58.000000Z"
-  // };
+  useEffect(() => {
+    if (user) {
+      console.log(user)
+    }
+  }, [user])
+
+
+  if (loading) {
+    return <p className="text-center   ">loading...</p>;
+  }
 
   const InfoItem = ({ icon: Icon, label, value }) => (
     <div className="flex items-start gap-3 border-b  py-2.5">
@@ -80,12 +60,12 @@ function Dashboard() {
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-25 group-hover:opacity-40 transition"></div>
                 <Avatar className="w-20 h-20 border-4 border-primary/20">
-                  <AvatarImage src={astrologer?.profile_image} />
+                  <AvatarImage src={(astrologer?.profile_image) || (user?.profile_image_url)} />
                   <AvatarFallback className="bg-gradient-to-br from-primary to-orange-500 text-white text-2xl">
-                    {astrologer?.name.charAt(0)}
+                    {(astrologer?.name.charAt(0)) || (user?.name.charAt(0))}
                   </AvatarFallback>
                 </Avatar>
-                {astrologer?.isOnline && (
+                {(astrologer?.isOnline) && (
                   <span className="absolute bottom-2 right-2 flex h-5 w-5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-5 w-5 bg-green-500 border-4 border-white shadow-lg"></span>
@@ -97,7 +77,7 @@ function Dashboard() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <h2 className="  font-bold tracking-tight">{astrologer?.name}</h2>
+                      <h2 className="  font-bold tracking-tight">{(astrologer?.name) || (user?.name)}</h2>
                       {astrologer?.isVerified && (
                         <Badge className="bg-emerald-500 hover:bg-emerald-600">
                           <Shield className="w-3 h-3 mr-1" />
@@ -112,43 +92,47 @@ function Dashboard() {
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <span className="text-sm">@{astrologer?.username}</span>
+                      <span className="text-sm">@{(astrologer?.username) || (user?.username)}</span>
                       <span className="text-xs">•</span>
-                      <span className="text-sm font-mono">{astrologer?.code}</span>
+                      <span className="text-sm font-mono">{(astrologer?.code) || (user?.code)}</span>
                     </div>
                   </div>
 
 
                 </div>
 
-                <div className="flex gap-2 flex-wrap">
-                  {astrologer?.expertise.map((exp) => (
-                    <Badge key={exp} variant="secondary" className="capitalize font-medium">
-                      {exp}
-                    </Badge>
-                  ))}
-                </div>
+                {astrologer && astrologer.role_id == 2 &&
+                  <>
+                    <div className="flex gap-2 flex-wrap">
+                      {astrologer?.expertise?.map((exp) => (
+                        <Badge key={exp} variant="secondary" className="capitalize font-medium">
+                          {exp}
+                        </Badge>
+                      ))}
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  <StatCard
-                    icon={Star}
-                    label="Total"
-                    value={`${astrologer?.rating | 0}/5.0`}
-                    color="bg-gradient-to-br from-amber-400 to-orange-500"
-                  />
-                  <StatCard
-                    icon={MessageSquare}
-                    label="Chat Price"
-                    value={`₹${astrologer?.chatPrice | 0}/min`}
-                    color="bg-gradient-to-br from-blue-500 to-cyan-500"
-                  />
-                  <StatCard
-                    icon={PhoneCall}
-                    label="Call Price"
-                    value={`₹${astrologer?.callPrice | 0}/min`}
-                    color="bg-gradient-to-br from-green-500 to-emerald-500"
-                  />
-                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      <StatCard
+                        icon={Star}
+                        label="Total"
+                        value={`${astrologer?.rating | 0}/5.0`}
+                        color="bg-gradient-to-br from-amber-400 to-orange-500"
+                      />
+                      <StatCard
+                        icon={MessageSquare}
+                        label="Chat Price"
+                        value={`₹${astrologer?.chatPrice | 0}/min`}
+                        color="bg-gradient-to-br from-blue-500 to-cyan-500"
+                      />
+                      <StatCard
+                        icon={PhoneCall}
+                        label="Call Price"
+                        value={`₹${astrologer?.callPrice | 0}/min`}
+                        color="bg-gradient-to-br from-green-500 to-emerald-500"
+                      />
+                    </div>
+                  </>
+                }
               </div>
             </div>
           </CardHeader>
@@ -167,49 +151,53 @@ function Dashboard() {
             <CardContent className="">
               <div className="space-y-1 grid grid-cols-2">
 
-                <InfoItem icon={User} label="Full Name" value={astrologer?.name} />
-                <InfoItem icon={User} label="Username" value={astrologer?.username} />
-                <InfoItem icon={User} label="Gender" value={astrologer?.gender} />
-                <InfoItem icon={Calendar} label="Date of Birth" value={astrologer?.dob} />
-                <InfoItem icon={MapPin} label="Birth Place" value={astrologer?.birthPlace} />
-                <InfoItem icon={Clock} label="Birth Time" value={astrologer?.birthTime} />
+                <InfoItem icon={User} label="Full Name" value={(astrologer?.name) || (user?.name)} />
+                <InfoItem icon={User} label="Username" value={(astrologer?.username) || (user?.username)} />
+                <InfoItem icon={User} label="Gender" value={(astrologer?.gender) || (user?.gender)} />
+                <InfoItem icon={Calendar} label="Date of Birth" value={(astrologer?.dob) || (user?.dob)} />
+                <InfoItem icon={MapPin} label="Birth Place" value={(astrologer?.birthPlace) || (user?.birthPlace)} />
+                <InfoItem icon={Clock} label="Birth Time" value={(astrologer?.birthTime) || (user?.birthTime)} />
               </div>
             </CardContent>
           </Card>
-          <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
-            <CardHeader className="border-b pb-0! pt-2  bg-primary">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <div className="p-2 rounded-lg bg-cyan-100">
-                  <Briefcase className="w-5 h-5 text-cyan-600" />
+          {
+            astrologer && astrologer.role_id == 2 &&
+            <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
+              <CardHeader className="border-b pb-0! pt-2  bg-primary">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <div className="p-2 rounded-lg bg-cyan-100">
+                    <Briefcase className="w-5 h-5 text-cyan-600" />
+                  </div>
+                  Professional Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="">
+                <div className="space-y-1 grid md:grid-cols-2">
+                  <InfoItem
+                    icon={Briefcase}
+                    label="Experience"
+                    value={astrologer?.experience ? `${astrologer?.experience} years` : null}
+                  />
+                  <InfoItem
+                    icon={Award}
+                    label="Expertise"
+                    value={astrologer?.expertise?.map(e => e.charAt(0).toUpperCase() + e.slice(1)).join(', ')}
+                  />
+                  <InfoItem
+                    icon={Languages}
+                    label="Languages"
+                    value={astrologer?.languages?.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(', ')}
+                  />
+                  <InfoItem
+                    icon={Star}
+                    label="Specialization"
+                    value={astrologer?.category?.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}
+                  />
                 </div>
-                Professional Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="">
-              <div className="space-y-1 grid md:grid-cols-2">
-                <InfoItem
-                  icon={Briefcase}
-                  label="Experience"
-                  value={astrologer?.experience ? `${astrologer?.experience} years` : null}
-                />
-                <InfoItem
-                  icon={Award}
-                  label="Expertise"
-                  value={astrologer?.expertise.map(e => e.charAt(0).toUpperCase() + e.slice(1)).join(', ')}
-                />
-                <InfoItem
-                  icon={Languages}
-                  label="Languages"
-                  value={astrologer?.languages.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(', ')}
-                />
-                <InfoItem
-                  icon={Star}
-                  label="Specialization"
-                  value={astrologer?.category.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}
-                />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          }
+
           <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
             <CardHeader className="border-b pb-0! pt-2  bg-primary">
               <CardTitle className="flex items-center gap-2 text-lg">
@@ -221,21 +209,21 @@ function Dashboard() {
             </CardHeader>
             <CardContent className=" ">
               <div className="space-y-1">
-                <InfoItem icon={Mail} label="Email" value={astrologer?.email} />
+                <InfoItem icon={Mail} label="Email" value={(astrologer?.email) || (user?.email)} />
                 <InfoItem
                   icon={Phone}
                   label="Mobile"
-                  value={astrologer?.mobile ? `${astrologer?.countryCode} ${astrologer?.mobile}` : null}
+                  value={astrologer?.mobile ? `${astrologer?.countryCode + " " + astrologer?.mobile || user?.countryCode + " " + user?.mobile}   ` : null}
                 />
-                <InfoItem icon={MapPin} label="Address" value={astrologer?.address} />
-                <InfoItem icon={MapPin} label="Pincode" value={astrologer?.pincode} />
+                <InfoItem icon={MapPin} label="Address" value={(astrologer?.address) || (user?.address)} />
+                <InfoItem icon={MapPin} label="Pincode" value={(astrologer?.pincode) || (user?.pincode)} />
               </div>
             </CardContent>
           </Card>
 
 
 
-          <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
+          {astrologer && astrologer.role_id == 2 && <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">
             <CardHeader className="border-b pb-0! pt-2  bg-primary">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <div className="p-2 rounded-lg bg-amber-100">
@@ -276,6 +264,7 @@ function Dashboard() {
               </div>
             </CardContent>
           </Card>
+          }
         </div>
 
         <Card className="shadow-md borde pt-0 overflow-hidden border-gray-200 hover:shadow-lg transition-shadow">

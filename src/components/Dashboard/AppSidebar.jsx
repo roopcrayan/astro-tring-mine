@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, Wallet } from "lucide-react";
+import { Calendar, HistoryIcon, Home, Inbox, Search, Settings, Wallet } from "lucide-react";
 import faviconlogo from "@/assets/favicon.png";
 import {
     Sidebar,
@@ -14,18 +14,18 @@ import {
 import { NavLink } from "react-router-dom";
 
 const items = [
-    { title: "Profile", url: "/astro/dashboard", icon: Home },
-    { title: "Update Profile", url: "/astro/update-astro", icon: Inbox },
-    { title: "wallet", url: "/astro/wallet", icon: Wallet },
-    { title: "Search", url: "#", icon: Search },
+    { title: "Profile", url: "/dashboard/profile", icon: Home },
+    { title: "Update Profile", url: "/dashboard/update-astro", icon: Inbox },
+    { title: "Wallet", url: "/dashboard/wallet", icon: Wallet },
+    { title: "Widhdrowl History", url: "/dashboard/widhdrow-history", icon: HistoryIcon },
     { title: "Settings", url: "#", icon: Settings },
 ];
 
 export function AppSidebar() {
     const { open, openMobile } = useSidebar()
     return (
-        <Sidebar collapsible="icon"  >
-            <SidebarHeader>
+        <Sidebar collapsible="icon" className={"border-0"}  >
+            <SidebarHeader className={"bg-yellow-50  "}>
                 <SidebarMenu >
                     <SidebarMenuItem >
                         <NavLink to="/" end className={"flex justify-center pt-2"}>
@@ -39,7 +39,7 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent>
+            <SidebarContent className={"bg-yellow-50 "}>
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>

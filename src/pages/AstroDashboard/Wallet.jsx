@@ -39,21 +39,23 @@ function WalletDashboard() {
   };
 
   const StatCard = ({ icon: Icon, title, value, subtitle, trend, colorClass, borderColor }) => (
-    <Card className={`overflow-hidden ${borderColor}`}>
-      <CardContent className="p-6">
+    <Card className={`overflow-hidden  ${borderColor} `}>
+
+      <CardContent className=" ">
         <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <div className="flex items-baseline gap-2">
-              <h3 className={`text-3xl font-bold ${colorClass}`}>{value}</h3>
-              {trend && (
-                <Badge variant="outline" className="text-xs">
-                  {trend}
-                </Badge>
-              )}
-            </div>
-            {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+
+          <div>
+
+            <p className="text-sm text-slate-600 mb-1">{title}</p>
+            <p className={`text-3xl font-bold ${colorClass}`}>{value}</p>
+            {trend && (
+              <Badge variant="outline" className="text-xs">
+                {trend}
+              </Badge>
+            )}
           </div>
+
+
           <div className={`p-3 rounded-lg ${colorClass} bg-opacity-10`}>
             <Icon className={`w-6 h-6 ${colorClass}`} />
           </div>
@@ -121,28 +123,28 @@ function WalletDashboard() {
             title="Total Earned"
             value={formatCurrency(walletData.total_earned)}
             colorClass="text-green-600"
-            borderColor={'border-green-600'}
+            borderColor={'border-green-200 bg-green-50'}
           />
           <StatCard
             icon={TrendingDown}
             title="Total Withdrawn"
             value={formatCurrency(walletData.total_withdrawn)}
             colorClass="text-orange-600"
-            borderColor={'border-orange-600'}
+            borderColor={'border-orange-200 bg-orange-50'}
           />
           <StatCard
             icon={DollarSign}
             title="Total Added"
             value={formatCurrency(walletData.total_added)}
             colorClass="text-blue-600"
-            borderColor={'border-blue-600'}
+            borderColor={'border-blue-200 bg-blue-50'}
           />
           <StatCard
             icon={ArrowDownRight}
             title="Total Spent"
             value={formatCurrency(walletData.total_spent)}
             colorClass="text-red-600"
-            borderColor={'border-red-600'}
+            borderColor={'border-red-200 bg-red-50'}
           />
         </div>
 

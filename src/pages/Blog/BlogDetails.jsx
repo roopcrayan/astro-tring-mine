@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Calendar, User, Tag, ArrowLeft, Share2, Bookmark } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useParams } from 'react-router-dom';
 
 const BlogDetails = () => {
   const blogData = {
@@ -21,6 +22,11 @@ const BlogDetails = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+
+  const param = useParams()
+  useEffect(() => {
+    console.log(param)
+  }, [param])
   return (
     <section className="py-12 bg-gradient-to-b from-slate-50 to-white min-h-screen">
       <div className="container   ">

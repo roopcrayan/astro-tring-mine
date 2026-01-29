@@ -70,7 +70,6 @@ export const AstrologerLogout = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const res = await api.post("/astro/logout");
-      console.log(res)
       return res.data.data;
     } catch (error) {
       return thunkApi.rejectWithValue(
@@ -156,10 +155,13 @@ const AstroAuthSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.astrologer = action.payload;
+        console.log(action.payload)
       })
       .addCase(AstrologerProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.astrologer = null;
+
       })
 
       /* ---------- GET ALL ---------- */

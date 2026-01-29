@@ -17,9 +17,10 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useSidebar } from '../ui/sidebar';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AstrologerLogout, AstrologerProfile } from "@/redux/slice/AstroAuth";
 import { toast } from "react-toastify";
+import { userProfile } from "@/redux/slice/UserAuth";
 
 
 
@@ -31,11 +32,18 @@ const NavbarAstro = () => {
         (state) => state.astroAuth
     );
     const { token, user } = useSelector((state) => state.userAuth);
+    const hasFetched = useRef(false);
+
+    const role = localStorage.getItem("role_id")
+
     useEffect(() => {
-        if (!astrologer) {
+        if (!token) return;
+        if (role == 2) {
             dispatch(AstrologerProfile());
+        } else {
+            dispatch(userProfile());
         }
-    }, [astrologer]);
+    }, [token, role, dispatch]);
 
     const LogoutAstro = async () => {
         toast.success('Astrologer logged out', {
@@ -46,14 +54,14 @@ const NavbarAstro = () => {
             theme: "light",
         });
         await dispatch(AstrologerLogout()).unwrap();
+        navigate("/")
         localStorage.removeItem("token");
         localStorage.removeItem("role_id");
-        navigate("/")
         // await fatchAstrologers();
     }
 
     return (
-        <nav className="border-b bg-white sticky   top-0 z-50">
+        <nav className="  bg-yellow-50 sticky   top-0 z-50">
             <div className="container mx-auto  px-4">
                 <div className="flex h-14   items-center justify-between">
                     {/* Logo */}
