@@ -34,7 +34,7 @@ const Banner = () => {
 
             <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
               <Card className={"active:scale-97"}>
-                <Link>
+                <Link to={"/talk-to-astrologer"}>
 
                   <CardHeader className="flex flex-row items-iten   justify-between">
                     <CardTitle className="flex items-center gap-3">
@@ -52,8 +52,7 @@ const Banner = () => {
                 </Link>
               </Card>
               <Card className={"active:scale-97"}>
-                <Link>
-
+                <Link to={"/talk-to-astrologer"}>
                   <CardHeader className="flex flex-row items-iten  justify-between">
                     <CardTitle className="flex items-center gap-3">
                       <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
