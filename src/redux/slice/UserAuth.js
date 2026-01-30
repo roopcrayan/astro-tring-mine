@@ -14,7 +14,10 @@ export const userLogin = createAsyncThunk(
                 );
             } else {
                 localStorage.setItem("token", res.data.token);
-                localStorage.getItem("role_id", res.data.user.role_id)
+                localStorage.setItem("role_id", res?.data?.user?.role_id)
+
+
+                
                 // localStorage.setItem("token", res.data.token);
                 return res.data.token;
             }
@@ -89,7 +92,7 @@ const initialState = {
     user: null,
     token: tokenFromStorage,
     loading: false,
-    isLoggedIn: !!tokenFromStorage, // ✅ IMPORTANT
+    isLoggedIn: !!tokenFromStorage,
     error: null,
 };
 const UserAuthSlice = createSlice({

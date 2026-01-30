@@ -99,7 +99,7 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("token"),
   astrologer: null,
   allastrologers: [],
-  token:localStorage.getItem("token") || " ",
+  token: localStorage.getItem("token") || " ",
   loading: false,
   error: null,
 };
@@ -156,7 +156,7 @@ const AstroAuthSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.astrologer = action.payload;
-        console.log(action.payload)
+
       })
       .addCase(AstrologerProfile.rejected, (state, action) => {
         state.loading = false;

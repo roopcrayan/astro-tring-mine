@@ -16,7 +16,7 @@ import { NavLink } from "react-router-dom";
 const items = [
     { title: "Profile", url: "/dashboard/profile", icon: Home },
     { title: "Update Profile", url: "/dashboard/update-astro", icon: Inbox },
-    { title: "Wallet", url: "/dashboard/wallet", icon: Wallet },
+    { title: "Wallet / Account", url: "/dashboard/wallet", icon: Wallet },
     { title: "Widhdrowl History", url: "/dashboard/widhdrow-history", icon: HistoryIcon },
     { title: "Settings", url: "#", icon: Settings },
 ];

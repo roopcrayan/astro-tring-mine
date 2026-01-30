@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin, userRegister } from "@/redux/slice/UserAuth";
+import { userLogin, userProfile, userRegister } from "@/redux/slice/UserAuth";
 import { toast } from "react-toastify";
 import { PhoneInput } from "./ui/phone-input";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -121,7 +121,7 @@ const UserLogin = ({ ele }) => {
         toast.success("You are logged in");
       }
       setOpen(false);
-      await dispatch(AstrologerProfile()).unwrap()
+      await dispatch(userProfile()).unwrap()
     } catch (err) {
       setErrors({
         fields: {},

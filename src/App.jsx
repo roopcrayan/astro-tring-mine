@@ -2,12 +2,13 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Layout from './layout/Layout';
 
 // import Astrodetails from './pages/AstrologerDetails'
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import AstroLayout from "./layout/AstroLayout";
-import { GetAllAstrologer } from "./redux/slice/AstroAuth";
+import { AstrologerProfile, GetAllAstrologer } from "./redux/slice/AstroAuth";
 import Astrodetails from "./components/Astrodetails";
+import { userProfile } from "./redux/slice/UserAuth";
 
 
 // import BlogPage from "./pages/BlogPage";
@@ -38,6 +39,25 @@ const App = () => {
 
   const path = useLocation().pathname;
   const dispatch = useDispatch();
+  const { astrologer } = useSelector((state) => state.astroAuth);
+  const { user } = useSelector((state) => state.userAuth)
+  const [role, setRole] = useState(localStorage.getItem("role_id"))
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role_id")
+    setRole(storedRole)
+  }, [])
+
+  useEffect(() => {
+    if (role == 2 && !astrologer) {
+      dispatch(AstrologerProfile())
+    }
+
+    if (role == 3 && !user) {
+      dispatch(userProfile())
+    }
+  }, [dispatch, role, astrologer, user])
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -80,7 +100,7 @@ const App = () => {
             <Route path="/dashboard/widhdrow-history" element={<WidhdrowHistory />} />
           </Route>
 
-          
+
 
         </Routes>
       </Suspense>
