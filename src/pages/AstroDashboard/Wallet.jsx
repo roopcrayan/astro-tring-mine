@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Wallet, TrendingUp, TrendingDown, Phone, MessageSquare, DollarSign, ArrowUpRight, ArrowDownRight, Calendar, Clock, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 
 function WalletDashboard() {
   const { astrologer } = useSelector((state) => state.astroAuth);
-
-   
-  const walletData = astrologer?.wallet || {
+  const { user } = useSelector((state) => state.userAuth)
+  const [role, setRole] = useState(localStorage.getItem("role_id"))
+  const walletData = (astrologer?.wallet) || (user?.wallet) || {
     balance: "0.00",
     created_at: "2026-01-19T12:19:58.000000Z",
     deleted_at: null,

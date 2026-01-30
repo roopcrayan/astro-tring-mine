@@ -253,49 +253,49 @@ function UpdateAstro() {
           <Card className="w-full max-w-md border-0">
             <CardContent className="pt-6 p-0">
               <div className="flex items-center gap-4">
-               <div className="relative w-fit">
-  <label
-    htmlFor="profileUpload"
-    className="relative cursor-pointer group block rounded-full overflow-hidden"
-  >
-    <Avatar className="w-20 h-20 border-4 border-primary/20 transition-transform duration-300 group-hover:scale-105">
-      <AvatarImage src={previewImage || currentProfile?.profile_image} />
-      <AvatarFallback className="bg-gradient-to-br from-primary to-orange-500 text-white text-2xl">
-        {currentProfile?.name?.charAt(0).toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
+                <div className="relative w-fit">
+                  <label
+                    htmlFor="profileUpload"
+                    className="relative cursor-pointer group block rounded-full overflow-hidden"
+                  >
+                    <Avatar className="w-20 h-20 border-4 border-primary/20 transition-transform duration-300 group-hover:scale-105">
+                      <AvatarImage src={previewImage || currentProfile?.profile_image} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-orange-500 text-white text-2xl">
+                        {currentProfile?.name?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
 
-    {/* Hover Overlay */}
-    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-      <span className="text-white text-xs font-medium flex flex-col items-center gap-1">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 7h2l2-3h10l2 3h2v11H3V7z"
-          />
-          <circle cx="12" cy="13" r="3" />
-        </svg>
-        Change
-      </span>
-    </div>
-  </label>
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                      <span className="text-white text-xs font-medium flex flex-col items-center gap-1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-5 h-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 7h2l2-3h10l2 3h2v11H3V7z"
+                          />
+                          <circle cx="12" cy="13" r="3" />
+                        </svg>
+                        Change
+                      </span>
+                    </div>
+                  </label>
 
-  <input
-    type="file"
-    accept="image/*"
-    hidden
-    id="profileUpload"
-    onChange={handleImageChange}
-  />
-</div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    id="profileUpload"
+                    onChange={handleImageChange}
+                  />
+                </div>
 
 
 

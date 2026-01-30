@@ -1,15 +1,15 @@
 import React from 'react'
-import faviconlogo from "@/assets/favicon.png";
+import faviconlogo from "@/assets/border.png";
 
-const HeadWithLogo = ({ time,title ,className ="" }) => {
+const HeadWithLogo = ({ time, title, className = "" }) => {
     return (
-        <div className={`text-center py-5 md:mb-8 mb-4 ${className} `}>
-            <div className='mb-10'>
-                <h2>{title}</h2>
-               { time && <p>Check your {time}'s horoscope</p>}
+        <div className={`text-center relative mb-30 ${className} `}>
+            <div className=''>
+                <h2 >{title}</h2>
+                {time && <p>Check your {time}'s horoscope</p>}
             </div>
-            <div className='h-[2px] w-full bg-black '>
-                <img src={faviconlogo} alt="Logo" className='mx-auto w-[50px] -translate-y-[50%]' />
+            <div className='h-[2px] w-full   ' >
+                <img src={faviconlogo} alt="Logo" className='mx-auto  h-[100px]' />
             </div>
         </div>
     )

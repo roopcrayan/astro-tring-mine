@@ -9,6 +9,13 @@ import AstroLayout from "./layout/AstroLayout";
 import { AstrologerProfile, GetAllAstrologer } from "./redux/slice/AstroAuth";
 import Astrodetails from "./components/Astrodetails";
 import { userProfile } from "./redux/slice/UserAuth";
+import Annanprashan from "./pages/FooterMahurat/Annanprashan";
+import Namkaran from "./pages/FooterMahurat/Namkaran";
+import CarBike from "./pages/FooterMahurat/CarBike";
+import Marriage from "./pages/FooterMahurat/Marriage";
+import BhumiPuja from "./pages/FooterMahurat/BhumiPuja";
+import GrihaPravesh from "./pages/FooterMahurat/GrihaPravesh";
+import Mundan from "./pages/FooterMahurat/Mundan";
 
 
 // import BlogPage from "./pages/BlogPage";
@@ -89,6 +96,19 @@ const App = () => {
             <Route path='/astro-register' element={<AstroRegister />} />
             <Route path="/blogs" element={<Blog />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+
+
+            <Route path="/annanprashan-muhurat" element={<Annanprashan />} />
+            <Route path="/aamkaran-muhurat" element={<Namkaran />} />
+            <Route path="/car-bike-muhurat" element={<CarBike />} />
+            <Route path="/marriage-muhurat" element={<Marriage />} />
+            <Route path="/bhumiPuja-muhurat" element={<BhumiPuja />} />
+            <Route path="/griha-pravesh-muhurat" element={<GrihaPravesh />} />
+            <Route path="/mundan-muhurat" element={<Mundan />} />
+
+
+
+
           </Route>
 
 

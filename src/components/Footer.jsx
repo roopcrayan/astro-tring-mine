@@ -6,9 +6,55 @@ import { SlSocialInstagram } from "react-icons/sl";
 import { TiSocialTwitter } from "react-icons/ti";
 import { TiSocialYoutube } from "react-icons/ti";
 import { FaAnglesRight } from "react-icons/fa6";
+import { getHoroscope } from "@/redux/slice/HoroscopesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 
 const Footer = () => {
+
+  const { horoscope } = useSelector((state) => state.horoscope)
+  const [horosType, setHorosType] = useState([])
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (!horoscope) {
+      const fetchHoroscopes = async () => {
+        try {
+          await dispatch(getHoroscope()).unwrap()
+        } catch (error) {
+          console.log(error.message)
+        }
+      }
+      fetchHoroscopes()
+    }
+  }, [horoscope, dispatch])
+
+  /* ------------------ GENERATE HOROSCOPE TYPES MENU ------------------ */
+  useEffect(() => {
+    if (horoscope?.length > 0) {
+      try {
+        const horosSet = new Set()
+        const horos = []
+
+        horoscope.forEach((ele) => {
+          if (ele.type && !horosSet.has(ele.type)) {
+            horosSet.add(ele.type)
+            horos.push({
+              label: ele.type.charAt(0).toUpperCase() + ele.type.slice(1) + " Horoscope",
+              path: `/horoscopes/${ele.type.toLowerCase()}`
+            })
+          }
+        })
+
+        setHorosType(horos)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+  }, [horoscope])
+
+  console.log("footer", horosType)
+
   return (
     <footer className='bg-accent-foreground pt-10 pb-0'>
       <div className="container">
@@ -27,30 +73,26 @@ const Footer = () => {
           <div className="grid xl:grid-cols-4 md:grid-cols-3  grid-cols-1 gap-4 pb-10">
             <div className='space-y-5'>
               <div>
-                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>About Astrology</h2>
+                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Horoscope</h2>
 
                 <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2  '><Link to={""} ><FaAnglesRight className="me-2 inline" /> Today's Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Today's Love Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Yesterday's Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Tomorrow's Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Weekly Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Monthly Horoscope</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Yearly Horoscope</Link></li>
+                  {horosType.map(horos => (
+                    <li key={horos.path} className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2  '><Link to={horos.path} ><FaAnglesRight className="me-2 inline" />  {horos.label} </Link></li>
+                  ))
+                  }
                 </ul>
               </div>
               <div>
                 <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Shubh Muhurat 2025</h2>
 
                 <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Annanprashan Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Naamkaran Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Car/Bike Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Marriage Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Gold Buying Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Bhoomi Pujan Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Griha Pravesh Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Mundan Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/annanprashan-muhurat" ><FaAnglesRight className="me-2 inline" /> Annanprashan Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/aamkaran-muhurat" ><FaAnglesRight className="me-2 inline" /> Naamkaran Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/car-bike-muhurat" ><FaAnglesRight className="me-2 inline" /> Car/Bike Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/marriage-muhurat" ><FaAnglesRight className="me-2 inline" /> Marriage Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/bhumiPuja-muhurat" ><FaAnglesRight className="me-2 inline" /> Bhoomi Pujan Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/griha-pravesh-muhurat" ><FaAnglesRight className="me-2 inline" /> Griha Pravesh Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/mundan-muhurat" ><FaAnglesRight className="me-2 inline" /> Mundan Muhurat 2025</Link></li>
 
                 </ul>
               </div>
@@ -60,41 +102,14 @@ const Footer = () => {
                 <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Important Links</h2>
 
                 <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astromall</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrotalk Store</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Today Panchang</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Live Astrologers</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> How to read kundali</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Free Kundli</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Kundli Matching</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Chat with Astrologer</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Talk to Astrologer</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Store</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Chat / Call with Astrologer</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrotalk Reviews</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrology Yoga</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Kaalsarp Doshas</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Child Astrology</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Ascendant Sign Gemstone</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Nakshatras Constellations</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Numerology</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Mantras</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrological remedies for job promotion</Link></li>
-
-                </ul>
-              </div>
-
-            </div>
-            <div className='space-y-5'>
-              <div>
-                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Important Links</h2>
-
-                <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Collaboration</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Tarot</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Zodiac Signs</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Vastu Shastra</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Love Calculator</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Guru Purnima 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrotalk Sitemap</Link></li>
 
                 </ul>
               </div>
@@ -124,9 +139,30 @@ const Footer = () => {
                 <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Astrologer</h2>
                 <ul className='mt-2'>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-login"} ><FaAnglesRight className="me-2 inline" /> Astrologer Login</Link></li>
-                    <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-register"} ><FaAnglesRight className="me-2 inline" /> Astrologer Registration</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={"/astro-register"} ><FaAnglesRight className="me-2 inline" /> Astrologer Registration</Link></li>
                 </ul>
               </div>
+              <div>
+                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Important Links</h2>
+
+                <ul className='mt-2'>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Collaboration</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Tarot</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Zodiac Signs</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Vastu Shastra</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Love Calculator</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Guru Purnima 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrotalk Sitemap</Link></li>
+
+                </ul>
+              </div>
+
+
+
+
+            </div>
+            <div className='space-y-5'>
+
               <div>
                 <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Corporate Info</h2>
                 <ul className='mt-2'>
@@ -134,7 +170,6 @@ const Footer = () => {
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Terms & Conditions</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Privacy Policy</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Disclaimer</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> About Us</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Pricing Policy</Link></li>
                 </ul>
               </div>
@@ -187,9 +222,9 @@ const Footer = () => {
         </div>
       </div>
       <div className=" bg-black text-white text-center py-5 mt-5">
-        Copyright  { new Date().getFullYear() } Astrology (Powered by Astrology Services Private Limited). All Rights Reserved
+        Copyright  {new Date().getFullYear()} Astrology (Powered by Astrology Services Private Limited). All Rights Reserved
       </div>
-    </footer>
+    </footer >
   )
 }
 

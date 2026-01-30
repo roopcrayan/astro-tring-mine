@@ -241,6 +241,8 @@ const Header = () => {
               ) : (
                 <Link
                   to={item.path}
+                  target={item.name === "Store" ? "_blank" : "_self"}
+
                   className="text-sm font-medium flex items-center transition-colors hover:text-primary"
                 >
                   <GiStarShuriken className="text-primary size-4 me-2" />
@@ -361,7 +363,7 @@ const Header = () => {
                 </div>
 
                 <SheetClose asChild>
-                  <Button variant="outline" onClick={()=>moveToDashboard()} className="w-full bg-primary rounded-full">
+                  <Button variant="outline" onClick={() => moveToDashboard()} className="w-full bg-primary rounded-full">
                     Dashboard
                   </Button>
                 </SheetClose>
