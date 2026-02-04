@@ -124,7 +124,7 @@
   }
 
   h1 {
-    @apply text-5xl font-bold;
+    @apply xl:text-5xl lg:text-4xl text-3xl  font-bold;
   }
   h2 {
     @apply text-4xl text-black font-semibold;
@@ -134,7 +134,7 @@
   }
 
   p {
-    @apply text-lg;
+    @apply lg:text-lg text-sm;
   }
 
   section {

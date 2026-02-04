@@ -32,7 +32,7 @@ const Banner = () => {
               Your world becomes clear once you understand how the universe influences it.
             </p>
 
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
+            <div className="grid sm:grid-cols-2 grid-cols-1 gap-2">
               <Card className={"active:scale-97"}>
                 <Link to={"/talk-to-astrologer"}>
 

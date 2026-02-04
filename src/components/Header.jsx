@@ -224,7 +224,7 @@ const Header = () => {
         </Link>
 
         {/* DESKTOP MENU */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden lg:flex items-center space-x-6">
           {navigationItems.map((item, index) => (
             <div
               key={index}
@@ -327,7 +327,7 @@ const Header = () => {
 
         {/* MOBILE MENU */}
         <Sheet>
-          <SheetTrigger asChild className="md:hidden">
+          <SheetTrigger asChild className="lg:hidden">
             <Button variant="ghost" size="icon">
               <Menu className="h-5 w-5" />
             </Button>
@@ -347,32 +347,39 @@ const Header = () => {
 
               {/* USER SECTION - MOBILE */}
               <div className="mt-4 px-2 space-y-2">
-                <div className="flex items-center gap-3 p-2 border rounded-md">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={user ? user?.profile_image : astrologer?.profile_image}
-                      alt={mockUser.username}
-                    />
-                    <AvatarFallback>
-                      {(astrologer?.name || user?.name)?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium"> {astrologer?.name || user?.name}</p>
+                {(astrologer?.name || user?.name) && ( 
+                  <div className="flex items-center gap-3 p-2 border rounded-md">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={user ? user?.profile_image : astrologer?.profile_image}
+                        alt={mockUser.username}
+                      />
+                      <AvatarFallback>
+                        {(astrologer?.name || user?.name)?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium"> {astrologer?.name || user?.name}</p>
+                    </div>
                   </div>
-                </div>
+                 )
+                }
+                {(astrologer?.name || user?.name) &&
+                  (<SheetClose asChild>
+                    <Button variant="outline" onClick={() => moveToDashboard()} className="w-full bg-primary rounded-full">
+                      Dashboard
+                    </Button>
+                  </SheetClose>)}
+                {(!astrologer && !user) &&
+                  (<UserLogin />)}
 
-                <SheetClose asChild>
-                  <Button variant="outline" onClick={() => moveToDashboard()} className="w-full bg-primary rounded-full">
-                    Dashboard
-                  </Button>
-                </SheetClose>
 
-                <SheetClose asChild>
-                  <Button variant="destructive" className="w-full rounded-2xl">
-                    Logout
-                  </Button>
-                </SheetClose>
+                {(astrologer?.name || user?.name) &&
+                  (<SheetClose asChild>
+                    <Button variant="destructive" className="w-full rounded-2xl" onClick={() => logout()}>
+                      Logout
+                    </Button>
+                  </SheetClose>)}
               </div>
             </ScrollArea>
           </SheetContent>
