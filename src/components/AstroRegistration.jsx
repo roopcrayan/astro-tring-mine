@@ -88,7 +88,7 @@ const expertiseOptions = [
 const steps = [
     { id: 1, title: "Personal Info", description: "Basic details" },
     { id: 2, title: "Professional", description: "Your expertise" },
-    { id: 3, title: "Pricing & Details", description: "Service rates & info" },
+    { id: 3, title: "Additional Details", description: "Complete profile" },
 ];
 
 const AstroRegister = () => {
@@ -107,24 +107,13 @@ const AstroRegister = () => {
         username: "",
         password: "",
         confirmPassword: "",
-        experience: "",
-        daily_available_hours: "",
         expertise: [],
         languages: [],
         categories: [],
-        chat_price: "",
-        call_price: "",
         is_family_astrologer: "0",
         family_astrology_details: "",
-        about: "",
-        pincode: "",
         address: "",
-        city_id: "",
-        state_id: "",
-        country_id: "",
-        pincode_id: "",
-        image: null,
-        imagePreview: "",
+        pincode: "",
     });
 
     const [errors, setErrors] = useState({});
@@ -209,58 +198,99 @@ const AstroRegister = () => {
         }));
     };
 
-    const handleImage = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error("Image size should be less than 5MB");
-            return;
-        }
-
-        if (!file.type.startsWith('image/')) {
-            toast.error("Please upload an image file");
-            return;
-        }
-
-        setForm((prev) => ({
-            ...prev,
-            image: file,
-            imagePreview: URL.createObjectURL(file),
-        }));
-    };
-
     const validateStep = (step) => {
         const newErrors = {};
 
         if (step === 1) {
-            if (!form.name.trim()) newErrors.name = "Name is required";
-            if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Valid email is required";
-            if (!form.mobile.trim() || form.mobile.length !== 10) newErrors.mobile = "Valid 10-digit mobile number is required";
-            if (!form.username.trim()) newErrors.username = "Username is required";
-            if (!form.password || form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
-            if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+            // Full Name validation
+            if (!form.name.trim()) {
+                newErrors.name = "Full name is required";
+            } else if (form.name.trim().length < 3) {
+                newErrors.name = "Full name must be at least 3 characters";
+            }
+
+            // Username validation
+            if (!form.username.trim()) {
+                newErrors.username = "Username is required";
+            } else if (form.username.trim().length < 3) {
+                newErrors.username = "Username must be at least 3 characters";
+            } else if (!/^[a-zA-Z0-9_]+$/.test(form.username)) {
+                newErrors.username = "Username can only contain letters, numbers, and underscores";
+            }
+
+            // Email validation
+            if (!form.email.trim()) {
+                newErrors.email = "Email is required";
+            } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+                newErrors.email = "Please enter a valid email address";
+            }
+
+            // Mobile validation
+            if (!form.mobile.trim()) {
+                newErrors.mobile = "Mobile number is required";
+            } else if (!/^\d{10}$/.test(form.mobile)) {
+                newErrors.mobile = "Mobile number must be exactly 10 digits";
+            }
+
+            // Password validation
+            if (!form.password) {
+                newErrors.password = "Password is required";
+            } else if (form.password.length < 6) {
+                newErrors.password = "Password must be at least 6 characters";
+            } else if (form.password.length > 20) {
+                newErrors.password = "Password must not exceed 20 characters";
+            }
+
+            // Confirm Password validation
+            if (!form.confirmPassword) {
+                newErrors.confirmPassword = "Please confirm your password";
+            } else if (form.password !== form.confirmPassword) {
+                newErrors.confirmPassword = "Passwords do not match";
+            }
         }
 
         if (step === 2) {
-            if (!form.experience || Number(form.experience) < 0) newErrors.experience = "Valid experience is required";
-            if (!form.daily_available_hours || Number(form.daily_available_hours) < 1 || Number(form.daily_available_hours) > 24) {
-                newErrors.daily_available_hours = "Hours must be between 1 and 24";
+            // Expertise validation
+            if (form.expertise.length === 0) {
+                newErrors.expertise = "Please select at least one area of expertise";
             }
-            if (form.expertise.length === 0) newErrors.expertise = "Select at least one expertise";
-            if (form.categories.length === 0) newErrors.categories = "Select at least one category";
-            if (form.languages.length === 0) newErrors.languages = "Select at least one language";
+
+            // Languages validation
+            if (form.languages.length === 0) {
+                newErrors.languages = "Please select at least one language";
+            }
+
+            // Categories validation
+            if (form.categories.length === 0) {
+                newErrors.categories = "Please select at least one category";
+            }
         }
 
         if (step === 3) {
-            if (!form.chat_price || Number(form.chat_price) < 0) newErrors.chat_price = "Valid chat price is required";
-            if (!form.call_price || Number(form.call_price) < 0) newErrors.call_price = "Valid call price is required";
-            if (!["0", "1"].includes(form.is_family_astrologer)) newErrors.is_family_astrologer = "Please select an option";
-            if (form.is_family_astrologer === "1" && !form.family_astrology_details.trim()) {
-                newErrors.family_astrology_details = "Family astrology details are required";
+            // Family Astrologer validation
+            if (!["0", "1"].includes(form.is_family_astrologer)) {
+                newErrors.is_family_astrologer = "Please select an option";
             }
-            if (form.family_astrology_details && form.family_astrology_details.length > 1000) {
-                newErrors.family_astrology_details = "Details must not exceed 1000 characters";
+
+            // Family Astrology Details validation (if family astrologer is Yes)
+            if (form.is_family_astrologer === "1") {
+                if (!form.family_astrology_details.trim()) {
+                    newErrors.family_astrology_details = "Family astrology details are required";
+                } else if (form.family_astrology_details.trim().length < 20) {
+                    newErrors.family_astrology_details = "Please provide at least 20 characters of details";
+                } else if (form.family_astrology_details.length > 1000) {
+                    newErrors.family_astrology_details = "Details must not exceed 1000 characters";
+                }
+            }
+
+            // Address validation (optional but if provided, should have minimum length)
+            if (form.address.trim() && form.address.trim().length < 10) {
+                newErrors.address = "Address should be at least 10 characters if provided";
+            }
+
+            // Pincode validation (optional but if provided, should be valid)
+            if (form.pincode.trim() && !/^\d{6}$/.test(form.pincode)) {
+                newErrors.pincode = "Pincode must be 6 digits";
             }
         }
 
@@ -272,6 +302,8 @@ const AstroRegister = () => {
         if (validateStep(currentStep)) {
             setCurrentStep(prev => prev + 1);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            toast.error("Please fix all errors before proceeding");
         }
     };
 
@@ -289,29 +321,20 @@ const AstroRegister = () => {
         }
 
         const submitData = {
-            name: form.name,
-            email: form.email,
+            name: form.name.trim(),
+            email: form.email.trim(),
             country_code: form.country_code,
-            mobile: form.mobile,
-            username: form.username,
+            mobile: form.mobile.trim(),
+            username: form.username.trim(),
             password: form.password,
             password_confirmation: form.confirmPassword,
-            experience: Number(form.experience),
-            daily_available_hours: Number(form.daily_available_hours),
             expertise: form.expertise,
             languages: form.languages,
             category: form.categories,
-            chat_price: Number(form.chat_price),
-            call_price: Number(form.call_price),
             is_family_astrologer: Number(form.is_family_astrologer),
-            family_astrology_details: form.is_family_astrologer === "1" ? form.family_astrology_details : null,
-            about: form.about || null,
-            pincode: form.pincode || null,
-            address: form.address || null,
-            city_id: form.city_id || null,
-            state_id: form.state_id || null,
-            country_id: form.country_id || null,
-            pincode_id: form.pincode_id || null,
+            family_astrology_details: form.is_family_astrologer === "1" ? form.family_astrology_details.trim() : null,
+            address: form.address.trim() || null,
+            pincode: form.pincode.trim() || null,
         };
 
         try {
@@ -339,134 +362,136 @@ const AstroRegister = () => {
         switch (currentStep) {
             case 1:
                 return (
-                    <div className="space-y-5 grid md:grid-cols-2 grid-cols-1">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Full Name *</Label>
-                            <Input
-                                id="name"
-                                name="name"
-                                placeholder="Enter your full name"
-                                value={form.name}
-                                onChange={handleChange}
-                                className={errors.name ? "border-red-500" : ""}
-                            />
-                            {errors.name && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.name}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="username">Username *</Label>
-                            <Input
-                                id="username"
-                                name="username"
-                                placeholder="Choose a unique username"
-                                value={form.username}
-                                onChange={handleChange}
-                                className={errors.username ? "border-red-500" : ""}
-                            />
-                            {errors.username && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.username}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email Address *</Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="your@email.com"
-                                value={form.email}
-                                onChange={handleChange}
-                                className={errors.email ? "border-red-500" : ""}
-                            />
-                            {errors.email && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.email}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label>Mobile Number *</Label>
-                            <div className="flex gap-2">
-                                <Select
-                                    value={form.country_code}
-                                    onValueChange={(value) => handleSelect("country_code", value)}
-                                    disabled={loadingCountries}
-                                >
-                                    <SelectTrigger className="w-[140px]">
-                                        <SelectValue placeholder="Code" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {countryCodes.map((code) => (
-                                            <SelectItem key={code.code} value={code.value}>
-                                                {code.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                    <div className="space-y-5">
+                        <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Full Name *</Label>
                                 <Input
-                                    name="mobile"
-                                    placeholder="1234567890"
-                                    value={form.mobile}
-                                    maxLength={10}
+                                    id="name"
+                                    name="name"
+                                    placeholder="Enter your full name"
+                                    value={form.name}
                                     onChange={handleChange}
-                                    className={`flex-1 ${errors.mobile ? "border-red-500" : ""}`}
+                                    className={errors.name ? "border-red-500" : ""}
                                 />
+                                {errors.name && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.name}
+                                    </p>
+                                )}
                             </div>
-                            {errors.mobile && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.mobile}
-                                </p>
-                            )}
-                        </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password *</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Min 6 characters"
-                                value={form.password}
-                                onChange={handleChange}
-                                className={errors.password ? "border-red-500" : ""}
-                            />
-                            {errors.password && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.password}
-                                </p>
-                            )}
-                        </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="username">Username *</Label>
+                                <Input
+                                    id="username"
+                                    name="username"
+                                    placeholder="Choose a unique username"
+                                    value={form.username}
+                                    onChange={handleChange}
+                                    className={errors.username ? "border-red-500" : ""}
+                                />
+                                {errors.username && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.username}
+                                    </p>
+                                )}
+                            </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirm Password *</Label>
-                            <Input
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Re-enter password"
-                                value={form.confirmPassword}
-                                onChange={handleChange}
-                                className={errors.confirmPassword ? "border-red-500" : ""}
-                            />
-                            {errors.confirmPassword && (
-                                <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle className="w-3 h-3" />
-                                    {errors.confirmPassword}
-                                </p>
-                            )}
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email Address *</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="your@email.com"
+                                    value={form.email}
+                                    onChange={handleChange}
+                                    className={errors.email ? "border-red-500" : ""}
+                                />
+                                {errors.email && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.email}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label>Mobile Number *</Label>
+                                <div className="flex gap-2">
+                                    <Select
+                                        value={form.country_code}
+                                        onValueChange={(value) => handleSelect("country_code", value)}
+                                        disabled={loadingCountries}
+                                    >
+                                        <SelectTrigger className="w-[140px]">
+                                            <SelectValue placeholder="Code" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {countryCodes.map((code) => (
+                                                <SelectItem key={code.code} value={code.value}>
+                                                    {code.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <Input
+                                        name="mobile"
+                                        placeholder="1234567890"
+                                        value={form.mobile}
+                                        maxLength={10}
+                                        onChange={handleChange}
+                                        className={`flex-1 ${errors.mobile ? "border-red-500" : ""}`}
+                                    />
+                                </div>
+                                {errors.mobile && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.mobile}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Password *</Label>
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Min 6 characters"
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    className={errors.password ? "border-red-500" : ""}
+                                />
+                                {errors.password && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.password}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    placeholder="Re-enter password"
+                                    value={form.confirmPassword}
+                                    onChange={handleChange}
+                                    className={errors.confirmPassword ? "border-red-500" : ""}
+                                />
+                                {errors.confirmPassword && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        {errors.confirmPassword}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 );
@@ -474,49 +499,6 @@ const AstroRegister = () => {
             case 2:
                 return (
                     <div className="space-y-5">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="experience">Experience (Years) *</Label>
-                                <Input
-                                    id="experience"
-                                    name="experience"
-                                    type="number"
-                                    min="0"
-                                    placeholder="5"
-                                    value={form.experience}
-                                    onChange={handleChange}
-                                    className={errors.experience ? "border-red-500" : ""}
-                                />
-                                {errors.experience && (
-                                    <p className="text-xs text-red-500 flex items-center gap-1">
-                                        <AlertCircle className="w-3 h-3" />
-                                        {errors.experience}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="daily_available_hours">Daily Hours *</Label>
-                                <Input
-                                    id="daily_available_hours"
-                                    name="daily_available_hours"
-                                    type="number"
-                                    min="1"
-                                    max="24"
-                                    placeholder="8"
-                                    value={form.daily_available_hours}
-                                    onChange={handleChange}
-                                    className={errors.daily_available_hours ? "border-red-500" : ""}
-                                />
-                                {errors.daily_available_hours && (
-                                    <p className="text-xs text-red-500 flex items-center gap-1">
-                                        <AlertCircle className="w-3 h-3" />
-                                        {errors.daily_available_hours}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-
                         <div className="space-y-2">
                             <Label>Expertise *</Label>
                             <Select onValueChange={(value) => handleMultiSelect("expertise", value)}>
@@ -639,48 +621,6 @@ const AstroRegister = () => {
             case 3:
                 return (
                     <div className="space-y-5">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="chat_price">Chat Price (per min) *</Label>
-                                <Input
-                                    id="chat_price"
-                                    name="chat_price"
-                                    type="number"
-                                    min="0"
-                                    placeholder="10"
-                                    value={form.chat_price}
-                                    onChange={handleChange}
-                                    className={errors.chat_price ? "border-red-500" : ""}
-                                />
-                                {errors.chat_price && (
-                                    <p className="text-xs text-red-500 flex items-center gap-1">
-                                        <AlertCircle className="w-3 h-3" />
-                                        {errors.chat_price}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="call_price">Call Price (per min) *</Label>
-                                <Input
-                                    id="call_price"
-                                    name="call_price"
-                                    type="number"
-                                    min="0"
-                                    placeholder="20"
-                                    value={form.call_price}
-                                    onChange={handleChange}
-                                    className={errors.call_price ? "border-red-500" : ""}
-                                />
-                                {errors.call_price && (
-                                    <p className="text-xs text-red-500 flex items-center gap-1">
-                                        <AlertCircle className="w-3 h-3" />
-                                        {errors.call_price}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-
                         <div className="space-y-2">
                             <Label>Are you a Family Astrologer? *</Label>
                             <Select
@@ -729,34 +669,23 @@ const AstroRegister = () => {
                         )}
 
                         <div className="space-y-2">
-                            <Label htmlFor="about">About You</Label>
-                            <Textarea
-                                id="about"
-                                name="about"
-                                placeholder="Tell clients about your expertise, approach, and what makes you unique..."
-                                value={form.about}
-                                onChange={handleChange}
-                                maxLength={2000}
-                                rows={6}
-                                className="resize-none"
-                            />
-                            <p className="text-xs text-gray-500 text-right">
-                                {form.about.length}/2000 characters
-                            </p>
-                        </div>
-
-                        <div className="space-y-2">
                             <Label htmlFor="address">Full Address</Label>
                             <Textarea
                                 id="address"
                                 name="address"
-                                placeholder="Enter your complete address"
+                                placeholder="Enter your complete address (optional)"
                                 value={form.address}
                                 onChange={handleChange}
-                                maxLength={2000}
+                                maxLength={500}
                                 rows={3}
-                                className="resize-none"
+                                className={`resize-none ${errors.address ? "border-red-500" : ""}`}
                             />
+                            {errors.address && (
+                                <p className="text-xs text-red-500 flex items-center gap-1">
+                                    <AlertCircle className="w-3 h-3" />
+                                    {errors.address}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -764,11 +693,18 @@ const AstroRegister = () => {
                             <Input
                                 id="pincode"
                                 name="pincode"
-                                placeholder="110001"
+                                placeholder="110001 (optional)"
                                 value={form.pincode}
-                                maxLength={10}
+                                maxLength={6}
                                 onChange={handleChange}
+                                className={errors.pincode ? "border-red-500" : ""}
                             />
+                            {errors.pincode && (
+                                <p className="text-xs text-red-500 flex items-center gap-1">
+                                    <AlertCircle className="w-3 h-3" />
+                                    {errors.pincode}
+                                </p>
+                            )}
                         </div>
                     </div>
                 );
@@ -783,15 +719,15 @@ const AstroRegister = () => {
     return (
         <section>
             <div className="container">
-                <div className="min-h-screen border  rounded-2xl py-12 ">
-                    <div className="  mx-auto">
+                <div className="min-h-screen border rounded-2xl py-12">
+                    <div className="mx-auto">
                         <div className="text-center mb-8">
-                            <h2 className="  text-gray-900 mb-2">
+                            <h2 className="text-gray-900 mb-2">
                                 Astrologer Registration
                             </h2>
                         </div>
 
-                        <Card className="p-8   border-0">
+                        <Card className="p-8 border-0">
                             <div className="mb-8">
                                 <div className="flex justify-between mb-4">
                                     {steps.map((step) => (
@@ -829,7 +765,7 @@ const AstroRegister = () => {
                             </div>
 
                             <form onSubmit={handleSubmit}>
-                                <div className="  mb-8">
+                                <div className="mb-8">
                                     {renderStepContent()}
                                 </div>
 

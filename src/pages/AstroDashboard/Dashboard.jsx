@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Award, Briefcase, Calendar, Clock, Globe, Languages, Mail, MapPin, MessageSquare, Phone, PhoneCall, Shield, Star, User } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 function Dashboard() {
@@ -14,7 +14,7 @@ function Dashboard() {
   if (loading) {
     return <p className="text-center   ">loading...</p>;
   }
-
+  useEffect(()=>{console.log((user?.pincode))},[])
   const InfoItem = ({ icon: Icon, label, value }) => (
     <div className="flex items-start gap-3 border-b  py-2.5">
       <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-muted/50 flex-shrink-0">
@@ -243,12 +243,12 @@ function Dashboard() {
                 <InfoItem
                   icon={Clock}
                   label="Last Active"
-                  value={new Date(astrologer?.lastSeenAt).toLocaleString('en-US', {
+                  value={new Date(astrologer?.last_seen_at).toLocaleString('en-US', {
                     dateStyle: 'medium',
                     timeStyle: 'short'
                   })}
                 />
-                <InfoItem
+                {/* <InfoItem
                   icon={Calendar}
                   label="Joined On"
                   value={new Date(astrologer?.createdAt).toLocaleDateString('en-US', {
@@ -256,7 +256,7 @@ function Dashboard() {
                     month: 'long',
                     day: 'numeric'
                   })}
-                />
+                /> */}
               </div>
             </CardContent>
           </Card>

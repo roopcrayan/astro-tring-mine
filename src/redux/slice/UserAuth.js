@@ -17,7 +17,7 @@ export const userLogin = createAsyncThunk(
                 localStorage.setItem("role_id", res?.data?.user?.role_id)
 
 
-                
+
                 // localStorage.setItem("token", res.data.token);
                 return res.data.token;
             }
@@ -166,7 +166,6 @@ const UserAuthSlice = createSlice({
                 state.isLoggedIn = false;
                 state.loading = false;
                 state.error = null;
-                localStorage.removeItem("token");
             })
             .addCase(userLogout.rejected, (state, action) => {
                 state.loading = false;

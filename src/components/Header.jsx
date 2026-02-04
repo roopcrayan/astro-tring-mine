@@ -125,20 +125,23 @@ const Header = () => {
     setIsDropdownOpen(false)
 
     try {
-      if (role == 2) {
+      const role = Number(localStorage.getItem("role_id"))
+
+      if (role === 2) {
         await dispatch(AstrologerLogout()).unwrap()
-      }
-      if (role == 3) {
+      } else if (role === 3) {
         await dispatch(userLogout()).unwrap()
       }
 
+      // clear local session
       localStorage.removeItem("token")
       localStorage.removeItem("role_id")
 
     } catch (err) {
-      console.log(err)
+      console.log("Logout error:", err)
     }
   }
+
 
   // Mock user data for design
   const mockUser = {
