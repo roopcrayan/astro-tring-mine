@@ -83,16 +83,16 @@ const Footer = () => {
                 </ul>
               </div>
               <div>
-                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Shubh Muhurat 2025</h2>
+                <h2 className='text-white border-b-2 border-b-primary/80 inline-block pb-1 font-semibold text-lg '>Shubh Muhurat 2026</h2>
 
                 <ul className='mt-2'>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/annanprashan-muhurat" ><FaAnglesRight className="me-2 inline" /> Annanprashan Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/aamkaran-muhurat" ><FaAnglesRight className="me-2 inline" /> Naamkaran Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/car-bike-muhurat" ><FaAnglesRight className="me-2 inline" /> Car/Bike Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/marriage-muhurat" ><FaAnglesRight className="me-2 inline" /> Marriage Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/bhumiPuja-muhurat" ><FaAnglesRight className="me-2 inline" /> Bhoomi Pujan Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/griha-pravesh-muhurat" ><FaAnglesRight className="me-2 inline" /> Griha Pravesh Muhurat 2025</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/mundan-muhurat" ><FaAnglesRight className="me-2 inline" /> Mundan Muhurat 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/annanprashan-muhurat" ><FaAnglesRight className="me-2 inline" /> Annanprashan Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/aamkaran-muhurat" ><FaAnglesRight className="me-2 inline" /> Naamkaran Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/car-bike-muhurat" ><FaAnglesRight className="me-2 inline" /> Car/Bike Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/marriage-muhurat" ><FaAnglesRight className="me-2 inline" /> Marriage Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/bhumiPuja-muhurat" ><FaAnglesRight className="me-2 inline" /> Bhoomi Pujan Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/griha-pravesh-muhurat" ><FaAnglesRight className="me-2 inline" /> Griha Pravesh Muhurat 2026</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to="/mundan-muhurat" ><FaAnglesRight className="me-2 inline" /> Mundan Muhurat 2026</Link></li>
 
                 </ul>
               </div>
@@ -151,7 +151,7 @@ const Footer = () => {
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Zodiac Signs</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Vastu Shastra</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Love Calculator</Link></li>
-                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Guru Purnima 2025</Link></li>
+                  <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Guru Purnima 2026</Link></li>
                   <li className='text-white text-sm mb-2   transition-all duration-300 hover:translate-x-2'><Link to={""} ><FaAnglesRight className="me-2 inline" /> Astrotalk Sitemap</Link></li>
 
                 </ul>

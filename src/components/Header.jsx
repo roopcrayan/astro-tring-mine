@@ -165,7 +165,7 @@ const Header = () => {
     },
     {
       name: "Store",
-      path: "https://store.adkrayons.com/",
+      path: "https://store.adkrayons.com/product",
       type: "link",
       hasmenu: false
     },
@@ -347,7 +347,7 @@ const Header = () => {
 
               {/* USER SECTION - MOBILE */}
               <div className="mt-4 px-2 space-y-2">
-                {(astrologer?.name || user?.name) && ( 
+                {(astrologer?.name || user?.name) && (
                   <div className="flex items-center gap-3 p-2 border rounded-md">
                     <Avatar className="h-10 w-10">
                       <AvatarImage
@@ -362,7 +362,7 @@ const Header = () => {
                       <p className="text-sm font-medium"> {astrologer?.name || user?.name}</p>
                     </div>
                   </div>
-                 )
+                )
                 }
                 {(astrologer?.name || user?.name) &&
                   (<SheetClose asChild>
