@@ -9,7 +9,7 @@ function Dashboard() {
 
   const { astrologer, loading } = useSelector((state) => state.astroAuth);
   const { user } = useSelector((state) => state.userAuth)
-  const [role, setRole] = useState(localStorage.getItem("role_id"))
+  const [role,  setRole] = useState(localStorage.getItem("role_id"))
 
   if (loading) {
     return <p className="text-center   ">loading...</p>;

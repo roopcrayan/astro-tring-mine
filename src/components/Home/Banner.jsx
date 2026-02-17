@@ -23,7 +23,7 @@ const Banner = () => {
 
           {/* Left content */}
 
-          
+
           <div className="space-y-5 self-center">
             <h1 className=" font-bold leading-tight">
               UNPACK THE  MYSTERIES OF   <br /> THE UNIVERSE!
@@ -74,7 +74,7 @@ const Banner = () => {
               </Card>
 
 
-              
+
               {/* <Card className={"active:scale-97"}>
                 <Link>
 
@@ -119,7 +119,7 @@ const Banner = () => {
           </div>
 
 
-          
+
 
           {/* Right animation */}
           <div className="relative flex items-center justify-center">

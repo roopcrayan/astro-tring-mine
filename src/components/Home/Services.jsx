@@ -9,7 +9,7 @@ const Services = () => {
         <section>
             <div className="container">
                 <ComponentHead
-                    heading='Complimentary astrology services'
+                    heading='Complimentary Astrology Services'
                     title='We offer free consultations to help you understand your birth chart and its implications.'
                 />
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6 mt-10">
