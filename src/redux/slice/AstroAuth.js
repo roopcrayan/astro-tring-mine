@@ -64,6 +64,20 @@ export const GetAllAstrologer = createAsyncThunk(
     }
   }
 );
+export const GetSingleAstro = createAsyncThunk(
+  "astroAuth/getSingleAstro",
+  async (data, thunkApi) => {
+    try {
+      const res = await api.get("/astro", data);
+
+      return res.data.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch Single astro"
+      );
+    }
+  }
+);
 
 export const AstrologerLogout = createAsyncThunk(
   "astroAuth/logout",
@@ -100,6 +114,7 @@ const initialState = {
   astrologer: null,
   allastrologers: [],
   token: localStorage.getItem("token") || " ",
+  singleAstro: null,
   loading: false,
   error: null,
 };
@@ -178,7 +193,7 @@ const AstroAuthSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      /* ---------- GET ALL ---------- */
+      /* ---------- Logout ---------- */
       .addCase(AstrologerLogout.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -202,6 +217,20 @@ const AstroAuthSlice = createSlice({
         state.error = null;
       })
       .addCase(AstrologerUpdate.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      /* ---------- update Astrologer ---------- */
+      .addCase(GetSingleAstro.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(GetSingleAstro.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.singleAstro = action.payload;
+      })
+      .addCase(GetSingleAstro.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

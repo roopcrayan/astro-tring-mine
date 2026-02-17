@@ -58,8 +58,8 @@ export default function CallCard({
                                 <Star
                                     key={i}
                                     className={`w-3.5 h-3.5 ${i < displayRating
-                                            ? 'fill-yellow-400 text-yellow-400'
-                                            : 'fill-gray-200 text-gray-200'
+                                        ? 'fill-yellow-400 text-yellow-400'
+                                        : 'fill-gray-200 text-gray-200'
                                         }`}
                                 />
                             ))}

@@ -1,6 +1,28 @@
-import React from "react";
+import { GetSingleAstro } from "@/redux/slice/AstroAuth";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const Astrodetails = () => {
+    const { id } = useParams();
+    const dispatch = useDispatch();
+
+    const { singleAstro } = useSelector((state) => state.astroAuth);
+
+    // shortcut (avoid singleAstro?.[0] everywhere)
+    const astro = singleAstro?.[0];
+
+    useEffect(() => {
+        if (id) {
+            dispatch(GetSingleAstro(id));
+        }
+    }, [id, dispatch]);
+
+
+    useEffect(() => {
+        console.log(singleAstro?.[0])
+    }, [])
+
 
     const bars = [
         { star: 5, width: "w-full", color: "bg-green-500" },
@@ -11,92 +33,134 @@ const Astrodetails = () => {
     ];
 
     return (
-        <section >
+        <section>
             <div className="container">
 
                 {/* Profile Card */}
-                <div className="  mx-auto border rounded-xl p-6 bg-white shadow-sm mt-6">
+                <div className="mx-auto border rounded-xl p-6 bg-white shadow-sm mt-6">
                     <div className="flex flex-col md:flex-row gap-6">
+
+                        {/* Image */}
                         <div className="flex flex-col items-center">
-                            <div className="w-36 h-36 rounded-full overflow-hidden border">
+                            <div className="w-90 h-70 rounded-2xl overflow-hidden border">
                                 <img
-                                    src="https://images.unsplash.com/photo-1527980965255-d3b416303d12"
+                                    src={astro?.profile_image}
                                     alt="profile"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <button className="mt-3 bg-yellow-400 text-black text-sm px-4 py-1 rounded-full">
-                                Follow
-                            </button>
                         </div>
 
-                        <div className="flex-1">
-                            <h2 className="text-xl font-semibold flex items-center gap-2">
-                                Magizhan
-                                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                        {/* Details */}
+                        <div className="flex-1 self-center">
+                            <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
+                                {astro?.name?.charAt(0).toUpperCase() + astro?.name}
+                                {astro?.is_online && (
+                                    <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+                                )}
                             </h2>
-                            <p className="text-sm text-gray-600">Vedic, Life Coach</p>
-                            <p className="text-sm text-gray-600">English, Tamil</p>
-                            <p className="text-sm text-gray-600">Exp: 5 Years</p>
 
-                            <p className="mt-2 font-semibold">₹ 24/min</p>
+                            {/* Expertise */}
+                            <p className="text-sm text-gray-600 mb-1">
+                                <span className="font-semibold  mr-1"> Expertise: </span>{" "}
+                                {astro?.expertise?.map((e, i) => (
+                                    <span key={i} className="mr-2 capitalize">
+                                        {e.replace("_", " ")}
+                                    </span>
+                                ))}
+                            </p>
 
-                            <div className="flex gap-4 mt-2 text-sm text-gray-600">
-                                <span>💬 16K mins</span>
-                                <span>📞 2K mins</span>
-                            </div>
+                            {/* Languages */}
+                            <p className="text-sm text-gray-600 mb-1">
+                                <span className="font-semibold  mr-1"> Languages: </span> {astro?.languages?.join(", ")}
+                            </p>
+
+                            {/* Category */}
+                            <p className="text-sm text-gray-600 mb-1">
+                                <span className="font-semibold  mr-1">  Category: </span> {astro?.category?.join(", ")}
+                            </p>
+
+                            {/* Experience */}
+                            <p className="text-sm text-gray-600 mb-1">
+                                <span className="font-semibold  mr-1"> Exp: </span> {astro?.experience} Years
+                            </p>
+                            <p className="text-sm text-gray-600 flex items-center gap-2">
+                                <span className="font-semibold  mr-1">  Rating :</span>
+                                <span className="flex">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            className={`text-sm ${star <= Math.round(astro?.rating || 0)
+                                                ? "text-yellow-400"
+                                                : "text-gray-300"
+                                                }`}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </span>
+                            </p>
+
+
+                            {/* Price */}
+                            <p className="mt-2  font-medium text-sm">
+                                ₹ {astro?.chat_price}/min (Chat)
+                            </p>
+                            <p className="mt-2  font-medium text-sm">
+                                ₹ {astro?.call_price}/min (Call)
+                            </p>
 
                             <div className="flex gap-4 mt-4">
                                 <button className="border border-green-500 text-green-600 px-6 py-2 rounded-full text-sm">
                                     Start Chat
                                 </button>
+
                                 <button className="border border-gray-400 text-gray-500 px-6 py-2 rounded-full text-sm">
                                     Start Call
-                                    <span className="block text-xs text-red-500">
-                                        Currently offline
-                                    </span>
+                                    {!astro?.is_online && (
+                                        <span className="block text-xs text-red-500">
+                                            Currently offline
+                                        </span>
+                                    )}
                                 </button>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Gallery */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-                        {[
-                            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
-                            "https://images.unsplash.com/photo-1527980965255-d3b416303d12",
-                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
-                            "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-                        ].map((img, i) => (
-                            <div key={i} className="h-40 rounded-lg overflow-hidden border">
-                                <img src={img} className="w-full h-full object-cover" />
-                            </div>
-                        ))}
                     </div>
 
                     {/* About */}
                     <div className="mt-6">
                         <h3 className="font-semibold mb-2">About me</h3>
                         <p className="text-sm text-gray-600 leading-relaxed">
-                            Magizhan, an adept Vedic Astrologer in India, is driven by a deep
-                            desire to assist clients in need. His spirit-guided readings, rooted
-                            in Astrology ethics, aim to bring stability to people's lives.
-                            Magizhan provides clarity and insight, empowering clients with
-                            spiritual knowledge about energies.
+                            Professional astrologer helping people with clarity, guidance and
+                            spiritual insight through Vedic astrology.
                         </p>
                     </div>
                 </div>
 
-                {/* Reviews Section */}
-                <div className="  mx-auto mt-8 mb-10">
+                {/* Reviews */}
+                <div className="mx-auto mt-8 mb-10">
                     <div className="border rounded-xl p-4 w-full">
                         <h3 className="font-semibold mb-3">Rating & Reviews</h3>
 
                         <div className="flex gap-6">
                             <div className="text-center">
-                                <p className="text-3xl font-bold">4.98</p>
-                                <div className="text-yellow-400 text-sm">★★★★★</div>
-                                <p className="text-xs text-gray-500 mt-1">4,289 total</p>
+                                <p className="text-3xl font-bold">{astro?.rating || 0}</p>
+                                <span className="flex">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            className={`text-sm ${star <= Math.round(astro?.rating || 0)
+                                                ? "text-yellow-400"
+                                                : "text-gray-300"
+                                                }`}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </span>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {astro?.rating_count} total
+                                </p>
                             </div>
 
                             <div className="flex-1 space-y-2">
@@ -110,12 +174,14 @@ const Astrodetails = () => {
                                 ))}
                             </div>
                         </div>
+
                         <button className="w-full mt-4 border rounded-lg p-2 text-sm text-gray-600 flex justify-between items-center">
                             Chat with Assistant?
                             <span>›</span>
                         </button>
                     </div>
                 </div>
+
             </div>
         </section>
     );

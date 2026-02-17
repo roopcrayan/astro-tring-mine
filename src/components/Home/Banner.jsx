@@ -22,6 +22,8 @@ const Banner = () => {
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-10">
 
           {/* Left content */}
+
+          
           <div className="space-y-5 self-center">
             <h1 className=" font-bold leading-tight">
               UNPACK THE  MYSTERIES OF   <br /> THE UNIVERSE!
@@ -70,7 +72,10 @@ const Banner = () => {
                   </CardHeader>
                 </Link>
               </Card>
-              <Card className={"active:scale-97"}>
+
+
+              
+              {/* <Card className={"active:scale-97"}>
                 <Link>
 
                   <CardHeader className="flex flex-row items-iten  justify-between">
@@ -87,8 +92,8 @@ const Banner = () => {
                     </CardAction>
                   </CardHeader>
                 </Link>
-              </Card>
-              <Card className={"active:scale-97"}>
+              </Card> */}
+              {/* <Card className={"active:scale-97"}>
                 <Link>
                   <CardHeader className="flex flex-row items-iten  justify-between">
                     <CardTitle className="flex items-center gap-3">
@@ -104,7 +109,7 @@ const Banner = () => {
                     </CardAction>
                   </CardHeader>
                 </Link>
-              </Card>
+              </Card> */}
 
 
 
@@ -113,16 +118,20 @@ const Banner = () => {
             {/* <Button>Chat now</Button> */}
           </div>
 
+
+          
+
           {/* Right animation */}
           <div className="relative flex items-center justify-center">
 
             {/* Outer rotating circle */}
             <img
               src={outer}
-              alt=""
+              alt="imageOuter"
               className="
                 w-[80%]
                 animate-spin
+                
                 
               motion-safe:animation-duration-[20s]
               "
@@ -131,10 +140,16 @@ const Banner = () => {
             {/* Inner reverse rotating circle */}
             <img
               src={inner}
-              alt=""
+              alt="imageInner"
               className="
                 absolute
                 w-[85%]
+                z-10
+               animate-spin
+                direction-reverse
+                
+              motion-safe:animation-duration-[20s]
+              
               "
             />
 
